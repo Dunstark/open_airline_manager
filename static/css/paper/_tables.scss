@@ -1,0 +1,36 @@
+@import "variables";
+
+.paper-table {
+    & th, td {
+        padding: 0 24px;
+        height: $table-row-height;
+        text-align: left;
+        &.paper-table-numeric {
+            text-align: right;
+        }
+    }
+    & td {
+        color: $table-color;
+        background: transparent;
+        font-size: 13px;
+    }
+    & th {
+        color: $table-head-color;
+        font-weight: 500;
+        font-size: 12px;
+    }
+    & tr {
+        border-bottom: 1px solid rgba($color-black, 0.12);
+    }
+    & tbody tr {
+        background: $table-background;
+        &:hover {
+            background: $table-hover-background;
+        }
+    }
+}
+
+.paper-table-title {
+    @extend .headline;
+    padding: 24px 24px 0 24px;
+}

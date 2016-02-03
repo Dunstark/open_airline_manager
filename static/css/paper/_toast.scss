@@ -1,0 +1,32 @@
+@import "variables";
+@import "mixins";
+
+.paper-toast {
+    box-sizing: border-box;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: $toast-desktop-padding;
+    z-index: 2000;
+    transition: transform 0.2s $animation-curve-default;
+    &.paper-toast-hidden {
+        transform: translate(0, 48px);
+    }
+}
+
+.paper-toast-content {
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    text-align: left;
+    background-color: $toast-background;
+    min-width: $toast-min-width;
+    max-width: $toast-max-width;
+    height: $toast-height;
+    margin: 0 auto;
+    @include shadow-2dp();
+    border-radius: 2px;
+    color: white;
+    padding: 0 $toast-padding;
+}

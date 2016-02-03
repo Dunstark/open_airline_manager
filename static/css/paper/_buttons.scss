@@ -1,0 +1,154 @@
+@import "variables";
+@import "shadow";
+
+.paper-button {
+    display: inline-block;
+    vertical-align: middle;
+    background-color: transparent;
+    border: none;
+    padding: 0 $button-padding;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 700;
+    height: $button-height;
+    line-height: $button-height;
+    will-change: box-shadow, transform;
+    transition: box-shadow 0.2s $animation-curve-fast-out-linear-in,
+                background-color 0.2s $animation-curve-default,
+                color 0.2s $animation-curve-default;
+    &:hover {
+        background-color: $button-hover-color;
+    }
+    &:active {
+        background-color: $button-active-color;
+    }
+    &-colored {
+        color: $button-primary-color-alt;
+    }
+    &.paper-button-raised {
+        background-color: $button-primary-color;
+        border-radius: 2px;
+        @include shadow-4dp;
+        &:hover {
+            @include shadow-6dp;
+        }
+        &.paper-button--colored {
+            background-color: $button-primary-color-alt;
+            color: $button-secondary-color-alt;
+            &:hover {
+                background-color: $button-hover-color-alt;
+            }
+            &:active {
+                background-color: $button-active-color-alt;
+            }
+        }
+    }
+
+    &.paper-button-fab {
+        box-sizing: border-vox;
+        @include shadow-4dp();
+        color: $button-fab-text-color-alt;
+        background-color: $button-fab-color-alt;
+        border-radius: 50%;
+        width: $fab-size;
+        height: $fab-size;
+        line-height: normal;
+        &:hover {
+            @include shadow-6dp();
+            background-color: $button-fab-hover-color-alt;
+        }
+        &:active {
+            background-color: $button-fab-active-color-alt;
+        }
+        & .material-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(- $fab-icon-size / 2, - $fab-icon-size / 2);
+            line-height: $fab-icon-size / 2;
+            width: $fab-icon-size / 2;
+        }
+        &.paper-button-fab--small {
+            width: $small-fab-size;
+            height: $small-fab-size;
+            & .material-icon {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(- $small-fab-icon-size / 2, - $small-fab-icon-size / 2);
+                line-height: $small-fab-icon-size / 2;
+                width: $small-fab-icon-size / 2;
+            }
+        }
+        &.paper-button--colored {
+
+        }
+    }
+}
+
+.paper-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.paper-input-group {
+    display: block;
+    padding: 8px 0;
+    position: relative;
+    &.paper-input-group--inline {
+        display: inline-block;
+    }
+    &::before {
+        display: block;
+        content: '';
+    }
+    
+    & .paper-label {
+        display: block;
+        font-size: 12px;
+        color: rgba($color-black, 0.54);
+        transition: color 0.2s $animation-curve-default;
+        &.focused {
+            color: $accent-color;
+        }
+        &::after {
+        position: absolute;
+        bottom: 8px;
+        left: 0;
+        right: 0;
+        display: block;
+        margin: 0 auto;
+        content: " ";
+        height: 2px;
+        width: 0;
+        background: $accent-color;
+        transition: width 0.2s $animation-curve-default;
+        }
+        &.focused::after {
+            width: 100%;
+        }
+    }
+    & .paper-input {
+        display: block;
+        position: relative;
+        background: transparent;
+        padding: 8px 0 8px 0;
+        border: 0;
+        border-bottom: 1px solid rgba($color-black, 0.12);
+        font-size: 16px;
+        width: 100%;
+        &:focus {
+          outline-color: transparent;
+          outline-style: none;
+        }
+        &.paper-input-inline {
+            display: inline-block;
+        }
+        &.paper-input-textarea-no-resize {
+            resize: none;
+        }
+    }
+}

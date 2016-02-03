@@ -1,0 +1,39 @@
+@import "variables";
+
+html, body, .paper-wrapper {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #eeeeee;
+}
+
+.paper-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    align-items: strech;
+    flex-grow: 1;
+}
+
+.page-row {
+    display: flex;
+}
+
+.page-row-expanded {
+    flex-grow: 1;
+}
+
+.paper-spacer {
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+.hidden {
+    display: none;
+    visibility: hidden;
+}

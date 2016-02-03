@@ -1,0 +1,23 @@
+.paper-shadow-2dp {
+    @include shadow-2dp();
+}
+
+.paper-shadow-3dp {
+    @include shadow-3dp();
+}
+
+.paper-shadow-4dp {
+    @include shadow-4dp();
+}
+
+.paper-shadow-6dp {
+    @include shadow-6dp();
+}
+
+.paper-shadow-8dp {
+    @include shadow-8dp();
+}
+
+.paper-shadow-16dp {
+    @include shadow-16dp();
+}

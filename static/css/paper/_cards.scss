@@ -1,0 +1,27 @@
+.paper-card {
+    box-sizing: border-box;
+    display: block;
+    background-color : white;
+    border-radius: 2px;
+    max-width: 1155px;
+    &.paper-card--dark {
+        background-color: $color-grey-900;
+        color: white;
+    }
+}
+
+.paper-card:before, .paper-card:after {
+    clear: both;
+}
+
+.paper-card-title {
+    @extend .title;
+    box-sizing: border-box;
+    padding: 24px 16px 16px 16px;
+    display: flex;
+    flex-direction: row;
+}
+
+.paper-card-content {
+    padding: 16px;
+}
