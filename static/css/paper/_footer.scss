@@ -5,4 +5,15 @@
     padding: 32px 16px;
     background: $color-grey-800;
     color: white;
+    vertical-align: middle;
+    text-align: center;
+
+  & .code-origin {
+    vertical-align: middle;
+    display: inline-flex;
+    & .material-icons {
+      font-size: 20px;
+      width: 1.3em;
+    }
+  }
 }
