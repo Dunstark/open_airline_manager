@@ -151,4 +151,24 @@
             resize: none;
         }
     }
+
+    &.paper-input-group--error {
+        & .paper-label {
+            color: $color-red-500;
+            &::after {
+                background-color: $color-red-500;
+                width: 100%;
+            }
+        }
+    }
+}
+
+.paper-input-error {
+    color: $color-red-500;
+    font-size: 12px;
+
+  & p {
+    padding: 0;
+    margin: 0;
+  }
 }
