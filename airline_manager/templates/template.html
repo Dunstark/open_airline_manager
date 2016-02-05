@@ -34,9 +34,8 @@
   </head>
   <body>
     <div class="paper-wrapper">
-        <div class="toolbar-background"> </div>
         <div class="page-row">
-        <header class="paper-header">
+        <header class="paper-header paper-header--relative paper-header--menu">
           <div class="paper-header-row">
             <span class="paper-header-title"><a href="{% url "index" %}">Airline Manager</a></span>
             <div class="paper-spacer"></div>
@@ -47,6 +46,15 @@
               </a>
             </nav>
           </div>
+            <div class="paper-header-row paper-header-row-nav">
+                <nav class="paper-header-main-nav">
+                    <a class="active" href="">{% trans "Home" %}</a>
+                    <a class="" href="">{% trans "Planes" %}</a>
+                    <a class="" href="">{% trans "Network" %}</a>
+                    <a class="" href="">{% trans "Research" %}</a>
+                    <a class="" href="">{% trans "Marketing" %}</a>
+                </nav>
+            </div>
         </header>
         </div>
   {% block preheader %}
@@ -55,6 +63,10 @@
       <main class="page-row page-row-expanded">
         <div class="main-content">
           {% block content %}
+              <div class="paper-card paper-shadow-2dp">
+                <div class="paper-card-title">Test</div>
+                <div class="paper-card-content">This is a test</div>
+              </div>
           {% endblock %}
         </div>
       </main>
