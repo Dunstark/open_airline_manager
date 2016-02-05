@@ -1,0 +1,16 @@
+{% extends "template.html" %}
+{% load i18n %}
+{% load gravatar %}
+
+{% block content %}
+<div class="paper-card paper-shadow-2dp">
+    <div class="paper-card-title">
+        {% blocktrans %}Page not found{% endblocktrans %}
+    </div>
+    <div class="paper-card-content">
+        {% blocktrans %}We can't seem to find the page you're looking for.{% endblocktrans %}
+
+    </div>
+</div>
+
+{% endblock %}
