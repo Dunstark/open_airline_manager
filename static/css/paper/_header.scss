@@ -1,57 +1,107 @@
 .paper-header {
-    padding: 0 20px;
-    box-sizing: border-box;
-    width: 100%;
-    height: 64px;
-    background-color: $primary-color;
-    & a {
-        color: white;
-        text-decoration: none;
-    }
+  padding: 0 20px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 64px;
+  background-color: $primary-color;
+  & a {
+    color: white;
+    text-decoration: none;
+  }
+  &.paper-header--relative {
+    @extend .paper-shadow-4dp;
+    position: relative;
+    margin-bottom: 24px;
+  }
+  &.paper-header--menu {
+    height: 112px;
+  }
 }
 
 .paper-header-row {
-    height: 64px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    flex-shrink: 0;
-    align-items: center;
+  height: 64px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  align-items: center;
+  &.paper-header-row-nav {
+    height: 48px;
+  }
 }
 
 .paper-header-title {
-    @extend .title;
-    display: flex;
-    color: white;
-    & a {
-        @extend .title;
-    }
+  @extend .title;
+  display: flex;
+  color: white;
+  & a {
+      @extend .title;
+  }
 }
 
 .paper-header-nav {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  & > * {
+    display: inline-flex;
+  }
+}
+
+.paper-header-main-nav {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  height: 48px;
+  & a {
+    height: 48px;
+    line-height:48px;
+    box-sizing: border-box;
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    vertical-align: middle;
-    & > * {
-        display: inline-flex;   
+    color: rgba($color-primary-contrast, 0.7);
+    padding: 0 24px;
+    position: relative;
+    will-change: color;
+    transition: color 0.2s $animation-curve-default;
+    &:hover {
+      color: $color-primary-contrast;
     }
+  }
+
+  & .active {
+    color: $color-primary-contrast;
+    &:after {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: white;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      content: " ";
+    }
+  }
 }
 
 .toolbar-background {
-    width: 100%;
-    height: 128px;
-    position: absolute;
-    z-index: -1;
-    background-color: $primary-color;
+  width: 100%;
+  height: 128px;
+  position: absolute;
+  z-index: -1;
+  background-color: $primary-color;
 }
 
 .header-img {
-    height: 32px;
-    width: 32px;
-    margin: 0 4px;
-    border-radius: 100%;
+  height: 32px;
+  width: 32px;
+  margin: 0 4px;
+  border-radius: 100%;
 }
