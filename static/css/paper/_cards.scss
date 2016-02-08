@@ -8,6 +8,15 @@
         background-color: $color-grey-900;
         color: white;
     }
+
+    & .paper-card-actions {
+        text-align: right;
+        box-sizing: border-box;
+        height: 48px;
+        border-top: 1px solid $color-grey-200;
+        padding: 6px 0;
+    }
+
 }
 
 .paper-card:before, .paper-card:after {

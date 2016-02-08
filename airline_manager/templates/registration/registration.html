@@ -3,12 +3,13 @@
 {% load i18n %}
 
 {% block content %}
-<div class="paper-card paper-shadow-2dp login-card">
-    
-    <div class="title">
+<div class="paper-card paper-shadow-2dp">
+
+    <div class="paper-card-title">
         Create an account
     </div>
 
+    <div class="paper-card-content">
     {% if form.non_fields_errors %}
     <p>{{ form.non_fields_errors }}</p>
     {% endif %}
@@ -32,9 +33,12 @@
             </div>
         {% endif %}
     {% endfor %}
-    <button type="submit" class="paper-button paper-button-raised paper-button--colored">
-        {% trans "Register" %}
-    </button>
+    </div>
+    <div class="paper-card-actions">
+        <button type="submit" class="paper-button paper-button--colored">
+            {% trans "Register" %}
+        </button>
+    </div>
     <input type="hidden" name="next" value="{{ next }}" />
     </form>
 

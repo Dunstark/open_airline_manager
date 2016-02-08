@@ -1,4 +1,4 @@
-{% load static from staticfiles %}{% load i18n %}{% load gravatar %}<!DOCTYPE html>
+{% load static from staticfiles %}{% load i18n %}{% load gravatar %}{% load menuhighlighter %}<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -48,11 +48,11 @@
           </div>
             <div class="paper-header-row paper-header-row-nav">
                 <nav class="paper-header-main-nav">
-                    <a class="active" href="">{% trans "Home" %}</a>
-                    <a class="" href="">{% trans "Planes" %}</a>
-                    <a class="" href="">{% trans "Network" %}</a>
-                    <a class="" href="">{% trans "Research" %}</a>
-                    <a class="" href="">{% trans "Marketing" %}</a>
+                    <a class="{% active 'home' %}" href="">{% trans "Home" %}</a>
+                    <a class="{% active 'planes' %}" href="">{% trans "Planes" %}</a>
+                    <a class="{% active 'network' %}" href="">{% trans "Network" %}</a>
+                    <a class="{% active 'research' %}" href="">{% trans "Research" %}</a>
+                    <a class="{% active 'marketing' %}" href="">{% trans "Marketing" %}</a>
                 </nav>
             </div>
         </header>

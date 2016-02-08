@@ -29,14 +29,23 @@
     {% endfor %}
 
     {% for field in form.visible_fields %}
-    <div class="paper-input-group">
-        <label class="paper-label">{{field.label_tag}}</label>
-        {% render_field field class+="paper-input" %}
-    </div>
+        <div class="paper-input-group {% if field.errors %}paper-input-group--error{% endif %}">
+            <label class="paper-label">{{field.label_tag}}</label>
+            {% render_field field class+="paper-input" %}
+        </div>
+        {% if field.errors %}
+            <div class="paper-input-error">
+                {% for error in field.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     {% endfor %}
-    <button type="submit" class="paper-button paper-button-raised paper-button--colored">
-        {% trans "Login" %}
-    </button>
+    <div class="paper-card-actions">
+        <button type="submit" class="paper-button paper-button-raised paper-button--colored">
+            {% trans "Login" %}
+        </button>
+    </div>
     <input type="hidden" name="next" value="{{ next }}" />
     </form>
 
