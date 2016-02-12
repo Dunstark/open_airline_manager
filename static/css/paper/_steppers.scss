@@ -1,0 +1,53 @@
+.paper-stepper {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 24px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid $color-grey-200;
+
+  & .paper-step {
+    flex-grow: 0;
+    vertical-align: middle;
+    display: inline-flex;
+    margin-right: 8px;
+
+    & .paper-step-circle {
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
+      font-size: 12px;
+      color: white;
+      background: $color-grey-500;
+      border-radius: 100%;
+      text-align: center;
+      line-height: 24px;
+    }
+    & .paper-step-name {
+      color: rgba($color-black, 0.26);
+      line-height: 24px;
+    }
+    &.paper-step--active {
+      & .paper-step-circle {
+        background: $primary-color;
+        color: white;
+      }
+      & .paper-step-name {
+        color: rgba($color-black, 0.87);
+      }
+
+    }
+
+  }
+  & .paper-stepper-separator {
+    flex-grow: 2;
+    height: 1px;
+    background: $color-grey-400;
+    margin-right: 8px;
+  }
+
+}
