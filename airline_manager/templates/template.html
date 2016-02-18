@@ -1,4 +1,4 @@
-{% load static from staticfiles %}{% load i18n %}{% load gravatar %}{% load menuhighlighter %}<!DOCTYPE html>
+{% load static from staticfiles %}{% load i18n %}{% load gravatar %}{% load menuhighlighter %}{% load humanize %}<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Operation Planner</title>
+    <title>Open Airline Manager</title>
 
     <!-- Platform specific metadata -->
     <meta name="application-name" content="Open Airline Manager">
@@ -37,13 +37,17 @@
         <div class="page-row">
         <header class="paper-header paper-header--relative paper-header--menu">
           <div class="paper-header-row">
-            <span class="paper-header-title"><a href="{% url "index" %}">Airline Manager</a></span>
+            <span class="paper-header-title"><a href="{% url "index" %}">Open Airline Manager</a></span>
             <div class="paper-spacer"></div>
             <nav class="paper-header-nav">
-              <a class="header-nav-profile" href="{% url "profile" %}">
-                <span class="">{{user.get_username}}</span>
+            {% with airline=user.airline.first %}
+              <span class="paper-header-nav-item">{{ airline.money|intcomma }}&dollar;</span>
+              <a class="paper-header-nav-item header-nav-profile" href="{% url "profile" %}">
+                <span class="">{{airline.name}}</span>
                 <img src="{% gravatar_url user.email "32" %}" class="header-img" alt="user.get_username">
               </a>
+            {% endwith %}
+
             </nav>
           </div>
             <div class="paper-header-row paper-header-row-nav">
@@ -63,10 +67,7 @@
       <main class="page-row page-row-expanded">
         <div class="main-content">
           {% block content %}
-              <div class="paper-card paper-shadow-2dp">
-                <div class="paper-card-title">Test</div>
-                <div class="paper-card-content">This is a test</div>
-              </div>
+
           {% endblock %}
         </div>
       </main>

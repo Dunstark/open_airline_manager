@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Operation Planner</title>
+    <title>Open Airline Manager</title>
 
     <!-- Platform specific metadata -->
     <meta name="application-name" content="Open Airline Manager">
@@ -34,6 +34,11 @@
   </head>
   <body>
     <div class="paper-wrapper">
+        <header class="paper-header paper-header--relative">
+          <div class="paper-header-row">
+            <span class="paper-header-title"><a href="{% url "index" %}">Open Airline Manager</a></span>
+          </div>
+        </header>
       {% block preheader %}
       {% endblock %}
 

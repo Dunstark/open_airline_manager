@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
 
 def index(request):
-    return render(request, 'template.html', {})
+    return render(request, 'index.html', {})
 
 def register(request):
     if request.user.is_authenticated():
@@ -35,5 +35,5 @@ def profile(request):
 
 @login_required()
 def user_home(request):
-    return render(request, 'template.html', {})
+    return render(request, 'home.html', {})
 
