@@ -7,15 +7,15 @@
 
     <div class="paper-stepper">
         <div class="paper-step paper-step--active">
-            <div class="paper-step-circle">1</div>
+            <div class="paper-step-circle">{% if active == 1 %}1{% else %}<i class="material-icons">done</i>{% endif %}</div>
             <div class="paper-step-name">
                 {% trans "Registration" %}
             </div>
         </div>
         <div class="paper-stepper-separator"> </div>
 
-        <div class="paper-step">
-            <div class="paper-step-circle">2</div>
+        <div class="paper-step {% if active >= 2 %} paper-step--active{% endif %}">
+            <div class="paper-step-circle">{% if active <= 1 %}2{% else %}<i class="material-icons">done</i>{% endif %}</div>
             <div class="paper-step-name">
                 {% trans "Create an airline" %}
             </div>
@@ -23,8 +23,8 @@
 
         <div class="paper-stepper-separator"> </div>
 
-        <div class="paper-step">
-            <div class="paper-step-circle">3</div>
+        <div class="paper-step {% if active >= 3 %} paper-step--active{% endif %}">
+            <div class="paper-step-circle">{% if active <= 3 %}3{% else %}<i class="material-icons">done</i>{% endif %}</div>
             <div class="paper-step-name">
                 {% trans "Buy a hub" %}
             </div>

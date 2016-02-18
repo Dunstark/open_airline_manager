@@ -1,17 +1,36 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-
-# Create your views here.
+from airline_manager.forms import AirlineForm
 
 def index(request):
+    if request.user.is_authenticated():
+        return redirect('home')
+
     return render(request, 'index.html', {})
 
 def register(request):
     if request.user.is_authenticated():
-        return redirect('home')
+        if not(request.user.airline.exists()):
+            active = 2
+            if request.method == 'POST':
+                form = AirlineForm(request.POST)
+
+                if form.is_valid():
+                    airline = form.save(commit=False)
+                    airline.owner = request.user
+                    airline.save()
+                    return redirect('home')
+
+            else:
+                form = AirlineForm()
+
+        else:
+            return redirect('home')
     else:
+        active = 1
         if request.method == 'POST':
             form = UserCreationForm(request.POST)
 
@@ -21,13 +40,12 @@ def register(request):
                                     password=form.cleaned_data['password1'],
                                     )
                 login(request, new_user)
-                return redirect('home')
+                return redirect('registration-airline')
 
         else:
             form = UserCreationForm()
 
-        return render(request, 'registration/registration.html', {'form': form})
-
+    return render(request, 'registration/registration.html', {'form': form, 'active': active})
 
 @login_required()
 def profile(request):
