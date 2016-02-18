@@ -20,6 +20,12 @@
     transition: box-shadow 0.2s $animation-curve-fast-out-linear-in,
                 background-color 0.2s $animation-curve-default,
                 color 0.2s $animation-curve-default;
+    &.paper-button--large {
+        padding: 0 $large-button-padding;
+        margin: 0 $large-button-padding;
+        height: $large-button-height;
+        line-height: $large-button-height;
+    }
     &:hover {
         background-color: $button-hover-color;
     }
@@ -44,6 +50,17 @@
             }
             &:active {
                 background-color: $button-active-color-alt;
+            }
+        }
+
+        &.paper-button--accent {
+            background-color: $button-primary-accent-color-alt;
+            color: $button-secondary-accent-color-alt;
+            &:hover {
+                background-color: $button-hover-accent-color-alt;
+            }
+            &:active {
+                background-color: $button-active-accent-color-alt;
             }
         }
     }

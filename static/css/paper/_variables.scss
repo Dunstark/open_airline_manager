@@ -35,6 +35,8 @@ $color-red-500: #F44336;
 /* BUTTONS */
 $button-padding: 8px;
 $button-height: 36px;
+$large-button-padding: 30px;
+$large-button-height: 54px;
 $fab-size: 56px;
 $fab-icon-size: 56px;
 $small-fab-size: 40px;
@@ -51,6 +53,14 @@ $button-secondary-color-alt: $color-primary-contrast !default;
 $button-hover-color-alt: $primary-color !default;
 $button-active-color-alt: $primary-color!default;
 $button-focus-color-alt: $button-focus-color !default;
+
+// Accent-Colored button colors.
+$button-primary-accent-color-alt: $accent-color!default;
+$button-secondary-accent-color-alt: $color-accent-contrast !default;
+$button-hover-accent-color-alt: $accent-color !default;
+$button-active-accent-color-alt: $accent-color!default;
+$button-focus-accent-color-alt: $button-focus-color !default;
+
 
 // Ripple color for colored raised buttons.
 $button-ripple-color-alt: $color-primary-contrast !default;

@@ -26,6 +26,10 @@
       border-radius: 100%;
       text-align: center;
       line-height: 24px;
+      & .material-icons {
+        line-height: 24px;
+        font-size: 20px;
+      }
     }
     & .paper-step-name {
       color: rgba($color-black, 0.26);

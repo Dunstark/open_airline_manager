@@ -50,6 +50,12 @@
   & > * {
     display: inline-flex;
   }
+
+  & .paper-header-nav-item {
+    color: $color-primary-contrast;
+    align-items: center;
+    margin-left: 8px;
+  }
 }
 
 .paper-header-main-nav {
