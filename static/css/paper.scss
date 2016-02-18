@@ -133,3 +133,37 @@
     width: 0 !important;
   }
 }
+
+.oam-index-header {
+  background: linear-gradient(rgba($color-black, 0.25) 0%, rgba($color-black, 0.25) 75%,rgba($color-black, 0.45) 100%), url("../img/airport_terminal.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size:cover;
+  color: $color-dark-contrast;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 16px;
+  & .oam-index-header-logo {
+    display: block;
+    width: 256px;
+    height: 256px;
+    margin: 0 0 16px 0;
+  }
+  & .oam-index-header-title {
+    display: block;
+    margin: 0;
+    text-shadow: 1px 1px 2px rgba($color-black, 0.25);
+  }
+  & .oam-index-header-credit {
+    align-self: flex-end;
+    color: rgba($color-dark-contrast, 0.87);
+    font-size: 12px;
+    font-weight: bold;
+    & a {
+      color: $color-dark-contrast;
+    }
+  }
+}

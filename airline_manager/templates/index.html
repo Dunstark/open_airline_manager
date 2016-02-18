@@ -1,0 +1,64 @@
+{% load static from staticfiles %}{% load i18n %}{% load gravatar %}{% load menuhighlighter %}{% load humanize %}<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Open Airline Manager</title>
+
+    <!-- Platform specific metadata -->
+    <meta name="application-name" content="Open Airline Manager">
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="msapplication-square70x70logo" content="{% static "img/windows/tiny.png" %}">
+    <meta name="msapplication-square150x150logo" content="{% static "img/windows/square.png" %}">
+    <meta name="msapplication-wide310x150logo" content="{% static "img/windows/wide.png" %}">
+    <meta name="msapplication-square310x310logo" content="{% static "img/windows/large.png" %}">
+    <link rel="icon" type="image/png" href="{% static "img/favicon.png" %}" sizes="16x16">
+    <meta name="theme-color" content="#2196F3">
+    <link rel="icon" type="image/png" href="{% static "img/android/192x192.png" %}" sizes="192x192">
+
+    <script src="{% static "js/jquery-2.1.4.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/jquery-ui.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/underscore.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/paper.js" %}" type="text/javascript"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="{% static "css/jquery-ui.min.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static "css/paper.css" %}" rel="stylesheet">
+{% block extraheader %}
+{% endblock %}
+  </head>
+  <body>
+    <div class="paper-wrapper">
+        <header class="page-row oam-index-header">
+            <img src="{% static "img/logo.png" %}" alt="Open Airline Manager" class="oam-index-header-logo">
+            <h2 class="oam-index-header-title">Open Airline Manager</h2>
+            <div class="oam-index-header-button">
+                <a href="{% url 'registration' %}" class="paper-button paper-button-raised paper-button--colored paper-button--large">{% trans "Join Now!" %}</a>
+            </div>
+            <div class="oam-index-header-credit">"Washington Dulles International Airport at Dusk" by Joe Ravi licensed under <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC-BY-SA 3.0</a></div>
+        </header>
+
+
+        <main class="page-row page-row-expanded">
+            <div class="main-content">
+              {% block content %}
+              {% endblock %}
+            </div>
+        </main>
+
+        {% include "mini-footer.html" %}
+    </div>
+
+  {% block dialog %}
+  {% endblock dialog %}
+  {% block toast %}
+  {% endblock toast %}
+  {% block script %}
+  {% endblock script %}
+  </body>
+</html>
