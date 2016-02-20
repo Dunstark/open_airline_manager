@@ -1,25 +1,28 @@
 language: python
 python:
-  - "3.4"
-  - "3.5"
+- '3.4'
+- '3.5'
 services:
-  - postgresql
+- postgresql
 env:
   global:
-    - DJANGO_SETTINGS_MODULE="open_airline_manager.test_settings"
+  - DJANGO_SETTINGS_MODULE="open_airline_manager.test_settings"
   matrix:
-    - DJANGO_VERSION=1.8.9
-    - DJANGO_VERSION=1.9.2
+  - DJANGO_VERSION=1.8.9
+  - DJANGO_VERSION=1.9.2
 install:
-  - pip install -q Django==$DJANGO_VERSION
-  - pip install -q psycopg2
-  - pip install coveralls
+- pip install -q Django==$DJANGO_VERSION
+- pip install -q psycopg2
+- pip install coveralls
 before_script:
-  - psql -c 'create database oam_test;' -U postgres
-  - python manage.py makemigrations
-  - python manage.py migrate
+- psql -c 'create database oam_test;' -U postgres
+- python manage.py makemigrations
+- python manage.py migrate
 script:
-  - python manage.py test airline_manager
-  - coverage run --source=airline_manager manage.py test airline_manager
+- python manage.py test airline_manager
+- coverage run --source=airline_manager manage.py test airline_manager
 after_success:
-  - coveralls
+- coveralls
+notifications:
+  slack:
+    secure: aLLUYrymeIFZqndUb5+apMBDpFwaGfpbiX0nLnl980ZRwkQ/wfhVXuk8aTRpwYoOdtvTYLpzSI+oqayjl+/M5nFbahEjvz2pD/k1gzNO2goFrxoGIrcpDOLDj38cqRT9lGbMfre3zw/ooWEtjjRue/uzoGk2nFSVrjtZWMnbnd6uotiH21meuQ2X3AUu5MRsriK4GPNKsv1xZOoBwTq5jVmmdjA1IAg9AyAyoiv8fTXP99HI8lx7VLDxM2TFHxbXvjo0S0mAzk9npkocPwddUuC646C6sQpBE50N9EpC/PvcxmpkMhU7qy4Yb8tkq0r9kYWc8D0tmqh4aZn62n2XqeeuAx5b6zhA7uSa96Pox1KCqR7X4huhssZvPzWcRg5x7Xbb5uVAKPO4PlfP5fEIaDKKWJu1RFRhhbioBunJeqBBTM2DK3vby4IdrBnFLKVCy0/Fb8D6OxL1CZ8QcIs8risJ19tRo4bRLo2iGAigF+MNfCYTIHGbLqAEmQ5j1wQcyqdaAHKJw39BHGux2UYy6J89kwmZxjQmbTiexO69xN18Ig5DLTicw15NRPQ284tHPgIdMWOrDJU4+IGKFUYdy9O5xYf1SWLCpVWXQfCeNU7Z9HxPttgnmMAtg4HzbXE7jBw2RJ1x0qVRWIyMOUkiqvIy7/7Vcm2Co4dp8s+2vsU=
