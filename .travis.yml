@@ -12,6 +12,7 @@ env:
     - DJANGO_VERSION=1.9.2
 install:
   - pip install -q Django==$DJANGO_VERSION
+  - pip install -q psycopg2
   - pip install coveralls
 before_script:
   - psql -c 'create database oam_test;' -U postgres
