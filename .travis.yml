@@ -11,6 +11,9 @@ env:
 install:
   - pip install -q Django==$DJANGO_VERSION
   - pip install coveralls
+before_script:
+  - python manage.py makemigrations
+  - python manage.py migrate
 script:
   - python manage.py test airline_manager
   - coverage run --source=airline_manager manage.py test airline_manager
