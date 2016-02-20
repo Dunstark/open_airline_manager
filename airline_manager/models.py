@@ -24,7 +24,7 @@ class Airline(models.Model):
 class Alliance(models.Model):
     name = models.CharField(max_length=45, unique=True)
     money = models.BigIntegerField(default=0)
-    founder = models.ForeignKey(Airline, on_delete=models.CASCADE, related_name="alliance_founder")
+    founder = models.OneToOneField(Airline, on_delete=models.CASCADE, related_name="alliance_founder")
 
     def __str__(self):
         return self.name
