@@ -81,9 +81,10 @@ CACHES = {
     },
 }
 
+# For backward compatibility 'ENGINE' still uses the old name. In production, use the new one if you are on 1.9+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'oam_test',
         'USER': 'postgres',
     }
