@@ -5,6 +5,7 @@ python:
 env:
   - DJANGO_VERSION=1.8.9
   - DJANGO_VERSION=1.9.2
+  - DJANGO_SETTINGS_MODULE=open_airline_manager.test_settings
 install:
   - pip install -q Django==$DJANGO_VERSION
   - pip install coveralls
