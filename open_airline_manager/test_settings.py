@@ -25,6 +25,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'airline_manager',
+    'widget_tweaks',
+    'django_gravatar',
 ]
 
 MIDDLEWARE_CLASSES = [

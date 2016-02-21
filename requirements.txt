@@ -1,0 +1,9 @@
+# Install with: `pip install -r requirements.txt`
+
+# Infrastructure
+Django >= 1.8.9
+psycopg2 >= 2.6.1
+
+# Support libs
+django-gravatar2 >= 1.4.0
+django-widget-tweaks >= 1.4.0
