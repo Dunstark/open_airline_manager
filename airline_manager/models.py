@@ -91,7 +91,7 @@ class Plane(models.Model):
         return self.type + " - " + self.name
 
     def is_valid_configuration(self, first_p, second_p, third_p):
-        if (third_p + 2*second_p + 4 * first_p) <= self.type.max_seats:
+        if ((third_p + 2*second_p + 4 * first_p) <= self.type.max_seats) and third_p >= 0 and second_p >= 0 and first_p >= 0:
             return True
         else:
             return False

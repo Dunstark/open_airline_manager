@@ -31,7 +31,7 @@ class PlaneTestCase(TestCase):
         self.airport2 = Airport.objects.create(name="Airport 2", iata="A21", city="City 1")
         self.line1 = Line.objects.create(start_point=self.airport1, end_point=self.airport2, length=100)
         self.line2 = Line.objects.create(start_point=self.airport1, end_point=self.airport2, length=350)
-        self.plane1 = PlaneType.objects.create(name="A380", manufacturer=0, range=200)
+        self.plane1 = PlaneType.objects.create(name="A380", manufacturer=0, range=200, max_seats=200)
 
     def test_length(self):
         """Planes are allowed to fly the correct lines"""
