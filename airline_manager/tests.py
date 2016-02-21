@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from airline_manager.models import Airline, Alliance
+from airline_manager.models import Airline, Alliance, Airport, PlaneType, Line
 
 
 class AllianceTestCase(TestCase):
@@ -23,3 +23,17 @@ class AllianceTestCase(TestCase):
     def test_member_funds(self):
         """Alliance members funds is correctly calculated"""
         self.assertEqual(self.alliance1.member_funds, 5)
+
+
+class PlaneTestCase(TestCase):
+    def setUp(self):
+        self.airport1 = Airport.objects.create(name="Airport 1", iata="A11", city="City 1")
+        self.airport2 = Airport.objects.create(name="Airport 2", iata="A21", city="City 1")
+        self.line1 = Line.objects.create(start_point=self.airport1, end_point=self.airport2, length=100)
+        self.line2 = Line.objects.create(start_point=self.airport1, end_point=self.airport2, length=350)
+        self.plane1 = PlaneType.objects.create(name="A380", manufacturer=0, range=200)
+
+    def test_length(self):
+        """Planes are allowed to fly the correct lines"""
+        self.assertTrue(self.plane1.can_fly_line(self.line1))
+        self.assertFalse(self.plane1.can_fly_line(self.line2))

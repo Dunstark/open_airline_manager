@@ -21,6 +21,7 @@ class Airline(models.Model):
         else:
             return False
 
+
 class Alliance(models.Model):
     name = models.CharField(max_length=45, unique=True)
     money = models.BigIntegerField(default=0)
@@ -34,7 +35,6 @@ class Alliance(models.Model):
         return self.members.aggregate(Sum('money'))['money__sum']
 
 
-
 class Airport(models.Model):
     name = models.CharField(max_length=90, unique=True)
     city = models.CharField(max_length=90)
@@ -45,8 +45,8 @@ class Airport(models.Model):
 
 
 class Line(models.Model):
-    start_point = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name="start_point")
-    end_point = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name="end_point")
+    start_point = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name="as_start_point")
+    end_point = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name="as_end_point")
     length = models.IntegerField()
 
     def __str__(self):
@@ -70,9 +70,28 @@ class PlaneType(models.Model):
     name = models.CharField(max_length=20,unique=True)
     manufacturer = models.IntegerField(choices=MANUFACTURER_CHOICES)
     range = models.PositiveIntegerField()
+    max_seats = models.IntegerField()
 
     def __str__(self):
         return self.manufacturer + self.name
 
     def can_fly_line(self, line):
         return self.range >= line.length
+
+
+class Plane(models.Model):
+    name = models.CharField(max_length=8)
+    type = models.ForeignKey(PlaneType, on_delete=models.CASCADE)
+    airline = models.ForeignKey(Airline, on_delete=models.CASCADE)
+    first = models.IntegerField()
+    second = models.IntegerField()
+    third = models.IntegerField()
+
+    def __str__(self):
+        return self.type + " - " + self.name
+
+    def is_valid_configuration(self, first_p, second_p, third_p):
+        if (third_p + 2*second_p + 4 * first_p) <= self.type.max_seats:
+            return True
+        else:
+            return False
