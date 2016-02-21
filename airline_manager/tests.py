@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from airline_manager.models import Airline, Alliance, Airport, PlaneType, Line
+from airline_manager.models import Airline, Alliance, Airport, PlaneType, Line, Plane
 
 
 class AllianceTestCase(TestCase):
@@ -27,13 +27,20 @@ class AllianceTestCase(TestCase):
 
 class PlaneTestCase(TestCase):
     def setUp(self):
+        self.a1 = Airline.objects.create(name="Airline 1", owner=User.objects.create(username="o1"), money=2)
         self.airport1 = Airport.objects.create(name="Airport 1", iata="A11", city="City 1")
         self.airport2 = Airport.objects.create(name="Airport 2", iata="A21", city="City 1")
         self.line1 = Line.objects.create(start_point=self.airport1, end_point=self.airport2, length=100)
         self.line2 = Line.objects.create(start_point=self.airport1, end_point=self.airport2, length=350)
-        self.plane1 = PlaneType.objects.create(name="A380", manufacturer=0, range=200, max_seats=200)
+        self.planeModel1 = PlaneType.objects.create(name="A380", manufacturer=0, range=200, max_seats=200)
+        self.plane1 = Plane.objects.create(name="AF547", type=self.planeModel1, airline=self.a1, first=0, second=0, third=200)
 
     def test_length(self):
         """Planes are allowed to fly the correct lines"""
-        self.assertTrue(self.plane1.can_fly_line(self.line1))
-        self.assertFalse(self.plane1.can_fly_line(self.line2))
+        self.assertTrue(self.planeModel1.can_fly_line(self.line1))
+        self.assertFalse(self.planeModel1.can_fly_line(self.line2))
+
+    def test_config(self):
+        """Plane configuration is correctly validated"""
+        self.assertTrue(self.plane1.is_valid_configuration(10, 25, 110))
+        self.assertFalse(self.plane1.is_valid_configuration(200, 25, 110))

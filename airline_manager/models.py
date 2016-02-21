@@ -80,7 +80,7 @@ class PlaneType(models.Model):
 
 
 class Plane(models.Model):
-    name = models.CharField(max_length=8)
+    name = models.CharField(max_length=5)
     type = models.ForeignKey(PlaneType, on_delete=models.CASCADE)
     airline = models.ForeignKey(Airline, on_delete=models.CASCADE)
     first = models.IntegerField()
