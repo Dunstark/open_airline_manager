@@ -44,3 +44,37 @@ class PlaneTestCase(TestCase):
         """Plane configuration is correctly validated"""
         self.assertTrue(self.plane1.is_valid_configuration(10, 25, 110))
         self.assertFalse(self.plane1.is_valid_configuration(200, 25, 110))
+
+
+class HomeViewTestCase(TestCase):
+
+    def setUp(self):
+        self.user1 = User.objects.create_user(username="o1", password="testuser")
+
+    def test_page_redirects(self):
+        """Home page correctly redirects a user that isn't logged to the homepage"""
+        response = self.client.get('/home/')
+        self.assertEquals(response.status_code, 302)
+
+    def test_page_loads(self):
+        """Home page loads correctly when the user is logged in"""
+        self.client.login(username="o1", password="testuser")
+        response = self.client.get('/home/')
+        self.assertEquals(response.status_code, 200)
+
+
+class IndexViewTestCase(TestCase):
+
+    def test_page_loads(self):
+        """Index page loads"""
+        response = self.client.get('/')
+        self.assertEquals(response.status_code, 200)
+
+
+class RegistrationViewTestCase(TestCase):
+
+    def test_page_loads(self):
+        """Register page loads"""
+        response = self.client.get('/register/')
+        self.assertEquals(response.status_code, 200)
+
