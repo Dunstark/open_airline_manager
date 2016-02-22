@@ -65,10 +65,20 @@ class HomeViewTestCase(TestCase):
 
 class IndexViewTestCase(TestCase):
 
+    def setUp(self):
+        self.user1 = User.objects.create_user(username="o1", password="testuser")
+
+    def test_page_redirects(self):
+        """Index page redirects correctly when the user is logged in"""
+        self.client.login(username="o1", password="testuser")
+        response = self.client.get('/')
+        self.assertEquals(response.status_code, 302)
+
     def test_page_loads(self):
-        """Index page loads"""
+        """Index page loads correctly when the user isn' logged in"""
         response = self.client.get('/')
         self.assertEquals(response.status_code, 200)
+
 
 
 class RegistrationViewTestCase(TestCase):
@@ -77,4 +87,22 @@ class RegistrationViewTestCase(TestCase):
         """Register page loads"""
         response = self.client.get('/register/')
         self.assertEquals(response.status_code, 200)
+
+
+class ProfileViewTestCase(TestCase):
+
+    def setUp(self):
+        self.user1 = User.objects.create_user(username="o1", password="testuser")
+
+    def test_page_redirects(self):
+        """Profile page correctly redirects a user that isn't logged to the homepage"""
+        response = self.client.get('/profile/')
+        self.assertEquals(response.status_code, 302)
+
+    def test_page_loads(self):
+        """Profile page loads correctly when the user is logged in"""
+        self.client.login(username="o1", password="testuser")
+        response = self.client.get('/profile/')
+        self.assertEquals(response.status_code, 200)
+
 
