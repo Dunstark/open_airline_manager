@@ -1,0 +1,19 @@
+{% extends "template.html" %}
+{% load i18n %}
+{% load gravatar %}
+
+{% block content %}
+<div class="paper-card paper-shadow-2dp profile-card">
+    <div class="paper-card-title">
+        <div class="profile-card-title-content">
+        <img src="{% gravatar_url user.email "100" %}" alt="{{user.get_username}}">
+        <h2 class="profile-card-title-content-text">{{user.get_username}}</h2>
+        <span class="profile-card-title-email">{{user.email}}</span>
+        </div>
+    </div>
+    <div class="paper-card-content profile-card-content">
+
+    </div>
+</div>
+
+{% endblock %}
