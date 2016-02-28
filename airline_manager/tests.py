@@ -32,7 +32,7 @@ class PlaneTestCase(TestCase):
         self.airport2 = Airport.objects.create(name="Airport 2", iata="A21", city="City 1")
         self.line1 = Line.objects.create(start_point=self.airport1, end_point=self.airport2, length=100)
         self.line2 = Line.objects.create(start_point=self.airport1, end_point=self.airport2, length=350)
-        self.planeModel1 = PlaneType.objects.create(name="A380", manufacturer=0, range=200, max_seats=200)
+        self.planeModel1 = PlaneType.objects.create(name="A380", manufacturer=0, range=200, max_seats=200, price=20000)
         self.plane1 = Plane.objects.create(name="AF547", type=self.planeModel1, airline=self.a1, first=0, second=0, third=200)
 
     def test_length(self):
