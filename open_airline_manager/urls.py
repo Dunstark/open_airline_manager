@@ -26,4 +26,5 @@ urlpatterns = [
     url(r'^register/$', views.register, name='registration'),
     url(r'^$', views.index, name='index'),
     url(r'^profile/$', views.profile, name='profile'),
+    url(r'^planes/$', views.planes_list, name='planes')
 ]

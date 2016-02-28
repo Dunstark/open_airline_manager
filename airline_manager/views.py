@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from airline_manager.forms import AirlineForm
+from airline_manager.models import Airline, Airport, PlaneType, Plane
 
 def index(request):
     if request.user.is_authenticated():
@@ -40,7 +41,7 @@ def register(request):
                                     password=form.cleaned_data['password1'],
                                     )
                 login(request, new_user)
-                return redirect('registration-airline')
+                return redirect('registration')
 
         else:
             form = UserCreationForm()
@@ -52,6 +53,13 @@ def profile(request):
     return render(request, 'profile.html', {})
 
 @login_required()
+def planes_list(request):
+    planes = Plane.objects.filter(airline=request.user.airline.first()).select_related('type')
+    return render(request, 'plane-list.html', {'planes': planes})
+
+
+@login_required()
 def user_home(request):
-    return render(request, 'home.html', {})
+    airline = request.user.airline.all().select_related('alliance').first()
+    return render(request, 'home.html', {'airline': airline})
 

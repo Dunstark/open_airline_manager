@@ -1,8 +1,105 @@
 {% extends "template.html" %}
 {% load i18n %}
+{% load humanize %}
 {% load static from staticfiles %}
 
+{% block extraheader %}
+{% endblock %}
+
 {% block content %}
+    <div class="page-row">
+        <div class="paper-card paper-shadow-2dp oam-airline-info-card">
+            <span class="paper-card-title">{{ airline }}</span>
+
+            <div class="oam-airline-info-content">
+                <div class="oam-airline-text">
+                    <i class="material-icons oam-airline-icon">star</i>
+                    <div class="oam-airline-text-content">
+                        <div class="oam-airline-label">Rank:</div>
+                        <div class="oam-airline-value">1500</div>
+                    </div>
+                </div>
+                <div class="oam-airline-text">
+                    <i class="material-icons oam-airline-icon">euro_symbol</i>
+                    <div class="oam-airline-text-content">
+                        <div class="oam-airline-label">Income:</div>
+                        <div class="oam-airline-value">{{ 228000000|intcomma }}</div>
+                    </div>
+                </div>
+                {% if airline.alliance %}
+                <div class="oam-airline-text">
+                    <i class="material-icons oam-airline-icon">group</i>
+                    <div class="oam-airline-text-content">
+                        <div class="oam-airline-label">Alliance:</div>
+                        <div class="oam-airline-value">{{ airline.alliance }}</div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="page-row">
+        <div class="paper-card paper-shadow-2dp oam-ranking-card">
+            <span class="paper-card-title">Ranking</span>
+            <div class="oam-chart">
+                <canvas id="ranking-chart"></canvas>
+            </div>
+        </div>
+
+        <div class="paper-card paper-shadow-2dp oam-income-card">
+            <span class="paper-card-title">Income</span>
+            <div class="oam-chart">
+                <canvas id="income-chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-row">
+        <div class="paper-card paper-shadow-2dp oam-departure-card">
+            <span class="paper-card-title">Next Departure</span>
+            <table class="paper-table paper-table--dark oam-departure-table">
+                <thead>
+                <tr>
+                    <th>Airport</th>
+                    <th>Plane</th>
+                    <th>Destination</th>
+                    <th>Time</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>CDG</td>
+                    <td>NA544</td>
+                    <td>LAX</td>
+                    <td>10h45</td>
+                </tr>
+                <tr>
+                    <td>CDG</td>
+                    <td>NA544</td>
+                    <td>JFK</td>
+                    <td>10h59</td>
+                </tr>
+                <tr>
+                    <td>LAX</td>
+                    <td>NA201</td>
+                    <td>SFO</td>
+                    <td>10h35</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="page-row">
+        <div class="paper-card paper-shadow-2dp">
+            <span class="paper-card-title">News</span>
+            {% lorem 3 p %}
+        </div>
+    </div>
+
 
 {% endblock %}
 
@@ -18,6 +115,130 @@
 {% endblock toast %}
 
 {% block script %}
+<script>
+    var incomeData = {
+        labels: ["12/02", "13/02", "14/02", "15/02", "16/02", "17/02", "18/02"],
+        datasets: [
+            {
+                label: "Income",
+                fill: true,
+                backgroundColor: "rgba(200,230,201,.2)",
+                borderColor: "#C8E6C9",
+                pointBorderColor: "#E8F5E9",
+                pointBackgroundColor: "#E8F5E9",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "#E8F5E9",
+                pointHoverBorderColor: "#E8F5E9",
+                pointHoverBorderWidth: 2,
+                data: [152000000, 235000000, 302500000, 267000000, 251000000, 301000000, 228000000]
+            }
+        ]
+    };
+    var rankingData = {
+        labels: ["12/02", "13/02", "14/02", "15/02", "16/02", "17/02", "18/02"],
+        datasets: [
+            {
+                label: "Rank",
+                fill: true,
+                backgroundColor: "rgba(197,202,233,.2)",
+                borderColor: "#C5CAE9",
+                pointBorderColor: "#E8EAF6",
+                pointBackgroundColor: "#E8EAF6",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "#E8EAF6",
+                pointHoverBorderColor: "#E8EAF6",
+                pointHoverBorderWidth: 2,
+                data: [28, 48, 40, 19, 86, 27, 90]
+            }
+        ]
+    };
+    window.onload = function(){
 
+        var ctx = document.getElementById("ranking-chart").getContext("2d");
+        var rankingChart = new Chart(ctx, {
+            type: 'line',
+            data: rankingData,
+            options: {
+                legend: { display: false },
+                scales: {
+                    xAxes: [
+                        {
+                            gridLines: {
+                                display: true,
+                                color: "rgba(255,255,255,.1)",
+                                zeroLineColor: "rgba(255,255,255,.54)",
+                            },
+                            ticks: {
+                                fontColor: "rgba(255,255,255,.87)",
+                                fontFamily: "'Roboto','Helvetica','Arial',sans-serif ",
+                            }
+                        }
+                    ],
+                    yAxes: [
+                        {
+                            type: 'linear',
+                            gridLines: {
+                                display: true,
+                                color: "rgba(255,255,255,.1)",
+                                zeroLineColor: "rgba(255,255,255,.54)",
+                            },
+                            ticks: {
+                                fontColor: "rgba(255,255,255,.87)",
+                                fontFamily: "'Roboto','Helvetica','Arial',sans-serif ",
+                            }
+                        }
+                    ],
+                },
+                elements: {
+                    line: {
+                        tension: 0,
+                    }
+                }
+            }
+        });
+
+        var ctx2 = document.getElementById("income-chart").getContext("2d");
+        var incomeChart = new Chart(ctx2, {
+            type: 'line',
+            data: incomeData,
+            options: {
+                legend: { display: false },
+                scales: {
+                    xAxes: [
+                        {
+                            gridLines: {
+                                display: true,
+                                color: "rgba(255,255,255,.1)",
+                                zeroLineColor: "rgba(255,255,255,.54)",
+                            },
+                            ticks: {
+                                fontColor: "rgba(255,255,255,.87)",
+                                fontFamily: "'Roboto','Helvetica','Arial',sans-serif ",
+                            }
+                        }
+                    ],
+                    yAxes: [
+                        {
+                            type: 'linear',
+                            gridLines: {
+                                display: true,
+                                color: "rgba(255,255,255,.1)",
+                                zeroLineColor: "rgba(255,255,255,.54)",
+                            },
+                            ticks: {
+                                fontColor: "rgba(255,255,255,.87)",
+                                fontFamily: "'Roboto','Helvetica','Arial',sans-serif ",
+                                callback: function(value) { return value.toLocaleString(); },
+                            }
+                        }
+                    ],
+                },
+            }
+        });
+
+    }
+</script>
   
 {% endblock script %}

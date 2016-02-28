@@ -50,7 +50,7 @@ class Line(models.Model):
     length = models.IntegerField()
 
     def __str__(self):
-        return self.start_point + " - " + self.end_point
+        return str(self.start_point) + " - " + str(self.end_point)
 
 
 MANUFACTURER_CHOICES = (
@@ -71,9 +71,10 @@ class PlaneType(models.Model):
     manufacturer = models.IntegerField(choices=MANUFACTURER_CHOICES)
     range = models.PositiveIntegerField()
     max_seats = models.IntegerField()
+    price = models.PositiveIntegerField()
 
     def __str__(self):
-        return self.manufacturer + self.name
+        return self.get_manufacturer_display() + " " + self.name
 
     def can_fly_line(self, line):
         return self.range >= line.length
@@ -88,7 +89,7 @@ class Plane(models.Model):
     third = models.IntegerField()
 
     def __str__(self):
-        return self.type + " - " + self.name
+        return str(self.type) + " - " + self.name
 
     def is_valid_configuration(self, first_p, second_p, third_p):
         if ((third_p + 2*second_p + 4 * first_p) <= self.type.max_seats) and third_p >= 0 and second_p >= 0 and first_p >= 0:
