@@ -1,0 +1,25 @@
+{% extends "template.html" %}
+{% load i18n %}
+{% load gravatar %}
+
+{% block content %}
+    {% for airport in airports %}
+        <div class="paper-card paper-shadow-2dp profile-card">
+            {{ airport.name }}
+            Airport Size: {{ airport.size }}
+            <ul>
+                <li>Name: {{ airport.name }}</li>
+            </ul>
+            <form method="post" action="">
+                <input type="hidden" name="airport_id" value="{{ airport.id }}">
+                <input type="submit" value="Acheter">
+            </form>
+
+        </div>
+    {% endfor %}
+
+    <div class="paper-card paper-shadow-2dp profile-card">
+
+</div>
+
+{% endblock %}

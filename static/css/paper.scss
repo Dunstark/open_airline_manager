@@ -167,3 +167,76 @@
     }
   }
 }
+
+.oam-ranking-card {
+  color: rgba(white, 0.87);
+  background: #303F9F;
+  width: 50%;
+  max-width: 50%;
+}
+
+.oam-income-card {
+  color: rgba(white, 0.87);
+  background: #2E7D32;
+  width: 50%;
+  max-width: 50%;
+}
+
+.oam-departure-card {
+  @extend .paper-card--dark;
+  width: 100%;
+  & .oam-departure-table {
+    width: 100%;
+  }
+}
+
+.oam-chart {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding: 0 16px;
+}
+
+.oam-plane-card {
+  & .oam-plane-card-content {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    & .oam-plane-card-img {
+      width: 20%;
+      & img {
+        width: 100%;
+      }
+    }
+    & .oam-plane-card-data {
+
+    }
+  }
+}
+
+.oam-airline-info-card {
+  width: 100%;
+  & .oam-airline-info-content {
+    display: flex;
+    flex-direction: row;
+    & .oam-airline-text {
+      padding: 8px 16px 8px 16px;
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      & .oam-airline-icon {
+        font-size: 48px;
+        color: #F9A825;
+      }
+      & .oam-airline-text-content {
+        margin-left: 8px;
+        & .oam-airline-label {
+          @extend .caption;
+        }
+        & .oam-airline-value {
+          @extend .headline;
+        }
+      }
+    }
+  }
+}

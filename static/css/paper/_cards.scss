@@ -1,7 +1,9 @@
 .paper-card {
     box-sizing: border-box;
+    margin: 8px;
     display: block;
     background-color : white;
+    color: rgba($color-black, 0.87);
     border-radius: 2px;
     max-width: 1155px;
     &.paper-card--dark {
@@ -17,20 +19,31 @@
         padding: 6px 0;
     }
 
+    &:before,:after {
+        clear: both;
+    }
+
+    & .paper-card-title {
+        @extend .title;
+        box-sizing: border-box;
+        padding: 24px 16px 16px 16px;
+        display: flex;
+        flex-direction: row;
+    }
+
+    & .paper-card-content {
+        padding: 16px;
+    }
+    & p {
+        margin: 0;
+        padding: 0 16px 16px;
+    }
 }
 
-.paper-card:before, .paper-card:after {
-    clear: both;
-}
-
-.paper-card-title {
-    @extend .title;
-    box-sizing: border-box;
-    padding: 24px 16px 16px 16px;
-    display: flex;
-    flex-direction: row;
-}
-
-.paper-card-content {
-    padding: 16px;
+a {
+  & .paper-card {
+    color: rgba($color-black, 0.87);
+    text-transform: none;
+    text-decoration: none;
+  }
 }

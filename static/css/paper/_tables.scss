@@ -21,11 +21,30 @@
     }
     & tr {
         border-bottom: 1px solid rgba($color-black, 0.12);
+        transition: background 0.2s $animation-curve-default;
+        will-change: background;
     }
     & tbody tr {
         background: $table-background;
         &:hover {
             background: $table-hover-background;
+        }
+    }
+    &.paper-table--dark {
+        & td {
+            color: $table-dark-color;
+        }
+        & th {
+            color: $table-dark-head-color;
+        }
+        & tr {
+            border-bottom: 1px solid rgba($color-white, 0.12);
+        }
+        & tbody tr {
+            background: $table-dark-background;
+            &:hover {
+                background: $table-dark-hover-background;
+            }
         }
     }
 }

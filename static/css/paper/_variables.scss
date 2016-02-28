@@ -99,10 +99,15 @@ $toast-height: 48px;
 $toast-padding: 24px;
 $toast-background: #323232;
 
-/* TOAST */
+/* TABLE */
 
 $table-row-height: 48px;
 $table-color: rgba($color-black, 0.87);
 $table-head-color: rgba($color-black, 0.54);
 $table-background: $color-white;
 $table-hover-background: #EEE;
+
+$table-dark-color: rgba($color-white, 0.87);
+$table-dark-head-color: rgba($color-white, 0.54);
+$table-dark-background: $color-grey-900;
+$table-dark-hover-background: $color-grey-800;

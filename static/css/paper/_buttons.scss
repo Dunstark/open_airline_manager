@@ -63,6 +63,18 @@
                 background-color: $button-active-accent-color-alt;
             }
         }
+        &.paper-shadow-6dp {
+            @include shadow-6dp;
+            &:hover {
+                @include shadow-8dp;
+            }
+        }
+        &.paper-shadow-8dp {
+            @include shadow-8dp;
+            &:hover {
+                @include shadow-16dp;
+            }
+        }
     }
 
     &.paper-button-fab {
