@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.db.models import Sum
 from django.contrib.auth.models import User
+from django.utils.functional import cached_property
 
 
 class Airline(models.Model):
@@ -10,6 +11,13 @@ class Airline(models.Model):
     money = models.BigIntegerField(default=100000000)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="airline")
     alliance = models.ForeignKey("Alliance", null=True, on_delete=models.SET_NULL, related_name="members")
+    raw_notoriety = models.IntegerField(default=0)
+    last_marketing = models.DateField(blank=True)
+    research = models.ManyToManyField("Research")
+    research_queue = models.ForeignKey("Research", null=True)
+    research_end = models.DateTimeField(blank=True)
+    success = models.ManyToManyField("Success")
+    rank = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
@@ -21,11 +29,42 @@ class Airline(models.Model):
         else:
             return False
 
+    @cached_property
+    def notoriety(self):
+        return self.raw_notoriety
+
+    @cached_property
+    def attractiveness(self):
+        return 0
+
+    @cached_property
+    def effectiveness(self):
+        return 0
+
+    @cached_property
+    def security(self):
+        return 0
+
+    @cached_property
+    def gains(self):
+        return 0
+
+    @cached_property
+    def score(self):
+        return 0
+
+    def debit(self, amount):
+        self.money += amount
+
+    def credit(self, amount):
+        self.money -= amount
+
 
 class Alliance(models.Model):
     name = models.CharField(max_length=45, unique=True)
     money = models.BigIntegerField(default=0)
     founder = models.OneToOneField(Airline, on_delete=models.CASCADE, related_name="alliance_founder")
+    rank = models.IntegerField()
 
     def __str__(self):
         return self.name
@@ -35,13 +74,40 @@ class Alliance(models.Model):
         return self.members.aggregate(Sum('money'))['money__sum']
 
 
+class Loan(models.Model):
+    borrower = models.ForeignKey(Airline, on_delete=models.CASCADE, related_name="loans")
+    amount = models.IntegerField()
+    still_to_be_paid = models.FloatField()
+    interest_rate = models.FloatField()
+
+
+class Success(models.Model):
+    name = models.CharField()
+    desc = models.CharField()
+    points = models.IntegerField()
+
+    def __str__(self):
+        return self.name
+
+
 class Airport(models.Model):
     name = models.CharField(max_length=90, unique=True)
     city = models.CharField(max_length=90)
     iata = models.CharField(max_length=3, unique=True)
+    type = models.IntegerField()
+    tax = models.IntegerField(default=10)
 
     def __str__(self):
         return self.iata + self.city + " - " + self.name
+
+
+class Hub(models.Model):
+    airport = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name="hubs")
+    owner = models.ForeignKey(Airline, on_delete=models.CASCADE, related_name="hubs")
+    lines = models.ManyToManyField(Line)
+
+    def __str__(self):
+        return str(self.airport)
 
 
 class Line(models.Model):
@@ -72,6 +138,7 @@ class PlaneType(models.Model):
     range = models.PositiveIntegerField()
     max_seats = models.IntegerField()
     price = models.PositiveIntegerField()
+    consumption = models.FloatField(default=4)
 
     def __str__(self):
         return self.get_manufacturer_display() + " " + self.name
@@ -81,12 +148,14 @@ class PlaneType(models.Model):
 
 
 class Plane(models.Model):
-    name = models.CharField(max_length=5)
+    name = models.CharField(max_length=8)
     type = models.ForeignKey(PlaneType, on_delete=models.CASCADE)
     airline = models.ForeignKey(Airline, on_delete=models.CASCADE)
     first = models.IntegerField()
     second = models.IntegerField()
     third = models.IntegerField()
+    active = models.IntegerField(default=0)
+    available_on = models.IntegerField(blank=True)
 
     def __str__(self):
         return str(self.type) + " - " + self.name
@@ -96,3 +165,19 @@ class Plane(models.Model):
             return True
         else:
             return False
+
+
+class News(models.Model):
+    title = models.CharField(max_length=90)
+    content = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
+class Research(models.Model):
+    title = models.CharField()
+    attractiveness = models.IntegerField()
+    security = models.IntegerField()
+    effectiveness = models.IntegerField()
