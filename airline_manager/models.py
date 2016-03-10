@@ -10,13 +10,13 @@ class Airline(models.Model):
     name = models.CharField(max_length=45, unique=True)
     money = models.BigIntegerField(default=100000000)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="airline")
-    alliance = models.ForeignKey("Alliance", null=True, on_delete=models.SET_NULL, related_name="members")
+    alliance = models.ForeignKey("Alliance", blank=True, null=True, on_delete=models.SET_NULL, related_name="members")
     raw_notoriety = models.IntegerField(default=0)
-    last_marketing = models.DateField(blank=True)
-    research = models.ManyToManyField("Research")
-    research_queue = models.ForeignKey("Research", null=True)
-    research_end = models.DateTimeField(blank=True)
-    success = models.ManyToManyField("Success")
+    last_marketing = models.DateField(auto_now_add=True, blank=True, null=True)
+    research = models.ManyToManyField("Research", blank=True, related_name="airlines")
+    research_queue = models.ForeignKey("Research", null=True, related_name="airlines_currently_researching")
+    research_end = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    success = models.ManyToManyField("Success", blank=True)
     rank = models.IntegerField(default=0)
 
     def __str__(self):
@@ -64,7 +64,7 @@ class Alliance(models.Model):
     name = models.CharField(max_length=45, unique=True)
     money = models.BigIntegerField(default=0)
     founder = models.OneToOneField(Airline, on_delete=models.CASCADE, related_name="alliance_founder")
-    rank = models.IntegerField()
+    rank = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
@@ -82,8 +82,8 @@ class Loan(models.Model):
 
 
 class Success(models.Model):
-    name = models.CharField()
-    desc = models.CharField()
+    name = models.CharField(max_length=90)
+    desc = models.CharField(max_length=255)
     points = models.IntegerField()
 
     def __str__(self):
@@ -94,7 +94,7 @@ class Airport(models.Model):
     name = models.CharField(max_length=90, unique=True)
     city = models.CharField(max_length=90)
     iata = models.CharField(max_length=3, unique=True)
-    type = models.IntegerField()
+    type = models.IntegerField(default=9)
     tax = models.IntegerField(default=10)
 
     def __str__(self):
@@ -104,7 +104,7 @@ class Airport(models.Model):
 class Hub(models.Model):
     airport = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name="hubs")
     owner = models.ForeignKey(Airline, on_delete=models.CASCADE, related_name="hubs")
-    lines = models.ManyToManyField(Line)
+    lines = models.ManyToManyField('Line')
 
     def __str__(self):
         return str(self.airport)
@@ -155,7 +155,7 @@ class Plane(models.Model):
     second = models.IntegerField()
     third = models.IntegerField()
     active = models.IntegerField(default=0)
-    available_on = models.IntegerField(blank=True)
+    available_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return str(self.type) + " - " + self.name
@@ -177,7 +177,7 @@ class News(models.Model):
 
 
 class Research(models.Model):
-    title = models.CharField()
+    title = models.CharField(max_length=90)
     attractiveness = models.IntegerField()
     security = models.IntegerField()
     effectiveness = models.IntegerField()
