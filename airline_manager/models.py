@@ -27,7 +27,7 @@ class Airline(models.Model):
     last_marketing = models.DateTimeField(default=timezone.now, blank=True, null=True)
     last_updated = models.DateTimeField(default=timezone.now)
     research = models.ManyToManyField("Research", blank=True, related_name="airlines")
-    research_queue = models.ForeignKey("Research", null=True, related_name="airlines_currently_researching")
+    research_queue = models.ForeignKey("Research", null=True, blank=True, related_name="airlines_currently_researching")
     research_end = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     success = models.ManyToManyField(Success, blank=True)
     rank_history = ArrayField(models.BigIntegerField(), size=7)
