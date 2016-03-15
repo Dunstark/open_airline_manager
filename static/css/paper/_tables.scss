@@ -30,6 +30,13 @@
             background: $table-hover-background;
         }
     }
+    &.paper-table--responsive {
+        width: 100%;
+        overflow-x: auto;
+        & table {
+
+        }
+    }
     &.paper-table--dark {
         & td {
             color: $table-dark-color;

@@ -1,6 +1,7 @@
 {% extends "template.html" %}
 {% load i18n %}
 {% load gravatar %}
+{% load static from staticfiles %}
 
 {% block content %}
 <div class="paper-card paper-shadow-2dp profile-card">
@@ -12,7 +13,21 @@
         </div>
     </div>
     <div class="paper-card-content profile-card-content">
-
+        <div class="title">{% trans "Achievements" %}({% with airline.number_of_success as n %}{{ n.0 }}/{{ n.1 }}{% endwith %})</div>
+        {% for achievement in airline.success.all %}
+            <div class="paper-media">
+                <div class="paper-media-icon">
+                    <img src="{% static "img/achievement/" %}{{ achievement.id }}.png" alt="{{ achievement.name }}">
+                </div>
+                <div class="paper-media-content">
+                    <div class="paper-media-title">
+                        <span class="subhead">{{ achievement.name }}</span>
+                         ({{ achievement.points }}<i class="material-icons">gamepad</i>)
+                    </div>
+                    <p>{{ achievement.desc }}</p>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 </div>
 
