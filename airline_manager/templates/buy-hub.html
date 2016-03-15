@@ -1,0 +1,24 @@
+{% extends "template.html" %}
+{% load i18n %}
+{% block content %}
+    {% if error %}
+        {% blocktrans %}
+            You already own this hub, please choose another one.
+        {% endblocktrans %}
+    {% endif %}
+    {% for airport in airports %}
+<div id="hub">
+    {{ airport }}
+    <form method="post" action="{% url 'buy-hub-save' %}">
+        <input type="hidden" name="airport" value="{{ airport.pk }}">
+        <input type="submit" value="buy">
+        {% csrf_token %}
+    </form>
+
+</div>
+
+    {% endfor %}
+
+
+
+{% endblock %}
