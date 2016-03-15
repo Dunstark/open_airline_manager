@@ -1,21 +1,30 @@
 {% extends "template.html" %}
-
+{% load i18n %}
+{% load static from staticfiles %}
 {% block content %}
-    <div>
-    <p>
-        name
-    </p>
-    {{ alliance.name }}
+<div class="paper-card paper-shadow-2dp profile-card">
+    <div class="paper-card-title">
+        <div class="profile-card-title-content">
+        <h2 class="profile-card-title-content-text">{{alliance}}</h2>
+        </div>
     </div>
-    <p>
-    members
-    </p>
-    <div>
-    {% for airline in airlines %}
-    {{ airline }}
-    {% endfor %}
+    <div class="paper-card-content profile-card-content">
+        <div class="title">{% trans "Members" %}</div>
     </div>
-
-
+    <table class="paper-table paper-table--responsive">
+        <thead>
+        <tr>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for airline in airlines %}
+        <tr>
+            <td>{{ airline }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}
