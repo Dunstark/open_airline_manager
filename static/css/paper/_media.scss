@@ -1,0 +1,20 @@
+.paper-media {
+  display: flex;
+  flex-direction: row;
+  padding: 16px 0;
+  & .paper-media-image {
+    max-width: 15%;
+    margin-right: 16px;
+  }
+  & .paper-media-content {
+    padding: 0 16px;
+    & .paper-media-title {
+      & .material-icons {
+        font-size: 14px;
+      }
+    }
+    & p {
+      padding: 0;
+    }
+  }
+}

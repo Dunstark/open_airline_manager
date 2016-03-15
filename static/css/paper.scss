@@ -22,6 +22,7 @@
 @import "paper/tooltip";
 @import "paper/toast";
 @import "paper/steppers";
+@import "paper/media";
 
 .main-content {
 	margin: 0 auto;
@@ -89,7 +90,10 @@
 .profile-card > .paper-card-title {
   color: #fff;
   height: 300px;
-  background: url('../img/profile-back.jpg')  center / cover;
+  background: linear-gradient(rgba($color-black, 0.25) 0%, rgba($color-black, 0.25) 75%,rgba($color-black, 0.45) 100%), url("../img/airport_terminal.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size:cover;
 }
 
 .profile-card-title-content {
@@ -171,14 +175,14 @@
 .oam-ranking-card {
   color: rgba(white, 0.87);
   background: #303F9F;
-  width: 50%;
+  width: 1155/2-16px;
   max-width: 50%;
 }
 
 .oam-income-card {
   color: rgba(white, 0.87);
   background: #2E7D32;
-  width: 50%;
+  width: 1155/2-16px;
   max-width: 50%;
 }
 
@@ -219,6 +223,7 @@
   & .oam-airline-info-content {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     & .oam-airline-text {
       padding: 8px 16px 8px 16px;
       display: flex;

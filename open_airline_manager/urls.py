@@ -30,5 +30,5 @@ urlpatterns = [
     url(r'^hub/$',views.buy_hub,name='buy-hub'),
 	url(r'^hubs/buy/$',views.buy_hub_save,name='buy-hub-save'),
     url(r'^alliance/(?P<alliance_id>[0-9]+)/$',views.alliance,name='airline_list'),
-
+    url(r'^testing/success$', views.test_success, name='test-success'),
 ]
