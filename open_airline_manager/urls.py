@@ -29,3 +29,4 @@ urlpatterns = [
     url(r'^planes/$', views.planes_list, name='planes'),
     url(r'^testing/success$', views.test_success, name='test-success')
 ]
+
