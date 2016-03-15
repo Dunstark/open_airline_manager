@@ -180,6 +180,7 @@ class Plane(models.Model):
     name = models.CharField(max_length=8)
     type = models.ForeignKey(PlaneType, on_delete=models.CASCADE)
     airline = models.ForeignKey(Airline, on_delete=models.CASCADE)
+    hub = models.ForeignKey(Hub, on_delete=models.CASCADE)
     first = models.IntegerField()
     second = models.IntegerField()
     third = models.IntegerField()
