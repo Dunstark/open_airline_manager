@@ -26,5 +26,9 @@ urlpatterns = [
     url(r'^register/$', views.register, name='registration'),
     url(r'^$', views.index, name='index'),
     url(r'^profile/$', views.profile, name='profile'),
-    url(r'^planes/$', views.planes_list, name='planes')
+    url(r'^planes/$', views.planes_list, name='planes'),
+    url(r'^hub/$',views.buy_hub,name='buy-hub'),
+	url(r'^hubs/buy/$',views.buy_hub_save,name='buy-hub-save'),
+    url(r'^alliance/(?P<alliance_id>[0-9]+)/$',views.alliance,name='airline_list'),
+
 ]

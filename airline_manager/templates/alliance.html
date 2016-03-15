@@ -1,0 +1,21 @@
+{% extends "template.html" %}
+
+{% block content %}
+    <div>
+    <p>
+        name
+    </p>
+    {{ alliance.name }}
+    </div>
+    <p>
+    members
+    </p>
+    <div>
+    {% for airline in airlines %}
+    {{ airline }}
+    {% endfor %}
+    </div>
+
+
+
+{% endblock %}
