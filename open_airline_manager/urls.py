@@ -31,6 +31,8 @@ urlpatterns = [
     url(r'^hub/$', views.buy_hub, name='buy-hub'),
     url(r'^hubs/buy/$', views.buy_hub_save, name='buy-hub-save'),
     url(r'^alliance/$', views.alliance_home, name='alliance-home'),
-    url(r'^alliance/(?P<alliance_id>[0-9]+)/$', views.alliance, name='alliance'),
+    url(r'^alliance/(?P<alliance_id>[0-9]+)/$', views.alliance_view, name='alliance'),
+    url(r'^alliance/allow/$', views.allow_into_alliance, name='allow-into-alliance'),
+    url(r'^alliance/(?P<alliance_id>[0-9]+)/join/$', views.alliance_join, name='join-alliance'),
     url(r'^testing/success$', views.test_success, name='test-success'),
 ]

@@ -3,9 +3,9 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from airline_manager.forms import AirlineForm
+from airline_manager.forms import AirlineForm, ConfigurationForm
 from airline_manager.models import Airline, Airport, PlaneType, Plane, Alliance, Hub, Line, PlayerLine, Flight, \
-    DailyFlight, Success
+    DailyFlight, Success, AllianceRequest
 from django.shortcuts import get_object_or_404
 
 
@@ -91,6 +91,22 @@ def planes_list(request):
 
 
 @login_required()
+def plane_configuration(request, plane_id):
+    plane = get_object_or_404(Plane, pk=plane_id)
+    if request.method == 'POST':
+        form = ConfigurationForm(request.POST, instance=plane)
+
+        if form.is_valid():
+            form.save()
+            return redirect('planes')
+
+    else:
+        form = ConfigurationForm(instance=plane)
+
+    return render(request, 'plane-configuration.html', {'form': form, 'plane_id': plane_id})
+
+
+@login_required()
 def user_home(request):
     airline = request.user.airline.all().select_related('alliance').first()
     if not Hub.objects.filter(owner=airline).exists():
@@ -125,19 +141,52 @@ def buy_hub_save(request):
 
 @login_required()
 def alliance_home(request):
-    alliance_id = request.user.airline.first().alliance_id
+    airline = request.user.airline.first()
+    alliance_id = airline.alliance_id
     if alliance_id is not None:
         return redirect('alliance', alliance_id=str(alliance_id))
     else:
         alliances = Alliance.objects.all().select_related('founder')
-        return render(request, 'alliances.html', {'alliances': alliances})
+        requests = AllianceRequest.objects.filter(airline=airline)
+        return render(request, 'alliances.html', {'alliances': alliances, 'requests': requests})
 
 
 @login_required()
-def alliance(request, alliance_id):
+def alliance_view(request, alliance_id):
     alliance = get_object_or_404(Alliance, pk=alliance_id)
     airline_list = alliance.members.all()
-    return render(request, 'alliance.html', {'airlines': airline_list, 'alliance': alliance})
+    airline = request.user.airline.first()
+    requests = None
+    is_founder = airline.is_founder
+    if is_founder:
+        requests = alliance.join_requests.all().select_related('airline')
+    return render(request, 'alliance.html',
+                  {'airlines': airline_list, 'alliance': alliance, 'is_founder': is_founder, 'requests': requests})
+
+
+@login_required()
+def alliance_join(request, alliance_id):
+    alli = get_object_or_404(Alliance, pk=alliance_id)
+    airline = request.user.airline.first()
+    if not AllianceRequest.objects.filter(alliance=alli, airline=airline).exists():
+        req = AllianceRequest(alliance=alli, airline=airline)
+        req.save()
+    return redirect('alliance-home')
+
+
+@login_required()
+def allow_into_alliance(request):
+    if request.method == 'POST':
+        airline = request.user.airline.select_related('alliance').first()
+        alliance = airline.alliance
+        if airline.is_founder:
+            req = get_object_or_404(AllianceRequest, pk=request.POST.get('req_id', None))
+            if req.alliance == alliance:
+                req.airline.alliance = alliance
+                req.airline.save()
+                req.delete()
+
+    return redirect('alliance-home')
 
 
 @login_required()
