@@ -1,3 +1,4 @@
 /open_airline_manager/settings.py
 *.sqlite3
 /.idea/
+*.pyc
