@@ -24,7 +24,7 @@ def register(request):
                     airline = form.save(commit=False)
                     airline.owner = request.user
                     airline.save()
-                    return redirect('home')
+                    return redirect('registration-hub')
 
             else:
                 form = AirlineForm()
@@ -49,6 +49,28 @@ def register(request):
 
     return render(request, 'registration/registration.html', {'form': form, 'active': active})
 
+
+@login_required()
+def register_hub(request):
+    error = None
+    if request.method == 'POST':
+        airportId = request.POST['airport']
+        airline = request.user.airline.first()
+        airport = Airport.objects.filter(pk=airportId)
+        if airport.exists():
+            airport = airport.first()
+            if not(Hub.objects.filter(owner=airline, airport=airport).exists()):
+                hub = Hub(owner=airline, airport=airport)
+                hub.save()
+                return redirect('home')
+            else:
+                error = "Own this hub"
+
+    airports = Airport.objects.all()
+
+    return render(request, 'registration/registration-hub.html', {'airports':airports, 'error': error})
+
+
 @login_required()
 def profile(request):
     airline = request.user.airline.all().select_related('alliance').first()
@@ -66,12 +88,16 @@ def planes_list(request):
 @login_required()
 def user_home(request):
     airline = request.user.airline.all().select_related('alliance').first()
+    if not Hub.objects.filter(owner=airline).exists():
+        return redirect('registration-hub')
     return render(request, 'home.html', {'airline': airline})
+
 
 @login_required()
 def buy_hub(request):
-    airport=Airport.objects.all()
-    return render(request, 'buy-hub.html', {'airports':airport})
+    airports = Airport.objects.all()
+    return render(request, 'buy-hub.html', {'airports': airports})
+
 
 @login_required()
 def buy_hub_save(request):
@@ -80,15 +106,16 @@ def buy_hub_save(request):
         airline = request.user.airline.first()
         if Airport.objects.filter(pk=airportId).exists():
             if not(Hub.objects.filter(owner=airline, airport_id = airportId).exists()):
-                hub=Hub()
+                hub = Hub()
                 hub.owner_id = airline.pk
                 hub.airport_id = airportId
                 hub.save()
                 return redirect('home')
             else:
-                airport=Airport.objects.all()
-                return render(request, 'buy-hub.html', {'airports':airport, 'error': "Own this hub"})
-
+                airports = Airport.objects.all()
+                return render(request, 'buy-hub.html', {'airports': airports, 'error': "Own this hub"})
+    else:
+        return redirect('buy-hub')
 
 @login_required()
 def alliance_home(request):

@@ -1,0 +1,76 @@
+{% extends "lightweight.html" %}
+{% load widget_tweaks %}
+{% load i18n %}
+
+{% block content %}
+<div class="paper-card paper-shadow-2dp">
+
+    <div class="paper-stepper">
+        <div class="paper-step paper-step--active">
+            <div class="paper-step-circle"><i class="material-icons">done</i></div>
+            <div class="paper-step-name">
+                {% trans "Registration" %}
+            </div>
+        </div>
+        <div class="paper-stepper-separator"> </div>
+
+        <div class="paper-step paper-step--active">
+            <div class="paper-step-circle"><i class="material-icons">done</i></div>
+            <div class="paper-step-name">
+                {% trans "Create an airline" %}
+            </div>
+        </div>
+
+        <div class="paper-stepper-separator"> </div>
+
+        <div class="paper-step paper-step--active">
+            <div class="paper-step-circle">3</div>
+            <div class="paper-step-name">
+                {% trans "Buy a hub" %}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="paper-card-title">
+        Create an account
+    </div>
+
+    <div class="paper-card-content">
+    {% if error %}
+        {% blocktrans %}
+            <p>You already own this hub, please choose another one.</p>
+        {% endblocktrans %}
+    {% endif %}
+
+    <table class="paper-table paper-table--responsive">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>City</th>
+            <th>Size</th>
+            <th>Tax</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for airport in airports %}
+        <tr>
+            <td>{{ airport.name }} ({{ airport.iata }})</td>
+            <td>{{ airport.city }}</td>
+            <td class="paper-table-numeric">{{ airport.type }}</td>
+            <td class="paper-table-numeric">{{ airport.tax }}</td>
+            <td>
+                <form method="post" action="{% url 'buy-hub-save' %}">
+                    <input type="hidden" name="airport" value="{{ airport.pk }}">
+                    <input type="submit" value="{% trans "Buy" %}" class="paper-button paper-button--colored">
+                    {% csrf_token %}
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}
