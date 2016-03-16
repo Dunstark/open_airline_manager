@@ -1,0 +1,36 @@
+{% extends "template.html" %}
+{% load i18n %}
+{% load gravatar %}
+{% load static from staticfiles %}
+
+{% block content %}
+    <a class="paper-button paper-button-raised paper-button--colored"><i class="material-icons">airplanemode_active</i> Buy plane</a>
+    <div class="paper-card paper-shadow-2dp">
+        <div class="paper-table-title">Planes</div>
+        <table class="paper-table paper-table--responsive">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>First/Second/Third</th>
+                <th>Consommation(L/100km/passenger)</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for plane in planes %}
+            <tr>
+                <td>{{ plane.name }} ({{ plane.type }})</td>
+                <td class="paper-table-numeric">{{ plane.first }}/{{ plane.second }}/{{ plane.third }}</td>
+                <td class="paper-table-numeric">2.44</td>
+                <td>
+                    <a href="#"><i class="material-icons">airline_seat_recline_normal</i></a>
+                    <a href="#"><i class="material-icons">flight_takeoff</i></a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+</div>
+
+{% endblock %}

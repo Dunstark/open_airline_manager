@@ -51,6 +51,10 @@ class HomeViewTestCase(TestCase):
 
     def setUp(self):
         self.user1 = User.objects.create_user(username="o1", password="testuser")
+        self.a1 = Airline.objects.create(name="Airline 1", owner=self.user1, money=2)
+        self.airport1 = Airport.objects.create(name="Airport 2", iata="A21", city="City 1")
+        self.hub1 = Hub.objects.create(airport=self.airport1, owner=self.a1)
+
 
     def test_page_redirects(self):
         """Home page correctly redirects a user that isn't logged to the homepage"""
