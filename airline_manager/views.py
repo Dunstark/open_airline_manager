@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from airline_manager.forms import AirlineForm
-from airline_manager.models import Airline, Airport, PlaneType, Plane
+from airline_manager.models import Airline, Airport, PlaneType, Plane,Alliance,Hub,Success,Line,PlayerLine
 from django.shortcuts import get_object_or_404
 
 def index(request):
@@ -117,3 +117,22 @@ def add_achievement(airline, achievement_id):
     achievement = Success.objects.get(pk=achievement_id)
     if not airline.success.filter(pk=achievement_id):
         airline.success.add(achievement)
+
+@login_required()
+def hub_list(request):
+    if request.method == 'POST':
+        name=request.user.airline.first()
+        hub=Hub.objects.filter(owner=name)
+
+    return render(request, 'hub-list.html',{'hubs':hub})
+
+@login_required()
+def playerline(request):
+    if request.method == 'POST':
+        hubID=request.POST['hub']
+        airport=Hub.objects.filter(pk=hubID)
+        line =Line.objects.filter(start_point=airport)
+        if line.lines_using.exists():
+            playerline=line.lines_using.all()
+
+    return render(request,'playerline.html',{'playerlines':playerline})
