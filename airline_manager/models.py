@@ -96,6 +96,11 @@ class Alliance(models.Model):
         return self.members.aggregate(Sum('money'))['money__sum']
 
 
+class AllianceRequest(models.Model):
+    airline = models.ForeignKey(Airline, on_delete=models.CASCADE, related_name="alliance_request")
+    alliance = models.ForeignKey(Alliance, on_delete=models.CASCADE, related_name="join_requests")
+
+
 class Loan(models.Model):
     borrower = models.ForeignKey(Airline, on_delete=models.CASCADE, related_name="loans")
     amount = models.IntegerField()

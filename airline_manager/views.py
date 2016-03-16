@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from airline_manager.forms import AirlineForm
-from airline_manager.models import Airline, Airport, PlaneType, Plane
+from airline_manager.models import Airline, Airport, PlaneType, Plane, Alliance, Hub, Line, PlayerLine, Flight, DailyFlight
 from django.shortcuts import get_object_or_404
 
 def index(request):
@@ -89,9 +89,19 @@ def buy_hub_save(request):
                 airport=Airport.objects.all()
                 return render(request, 'buy-hub.html', {'airports':airport, 'error': "Own this hub"})
 
+
+@login_required()
+def alliance_home(request):
+    alliance_id = request.user.airline.first().alliance_id
+    if alliance_id is not None:
+        return redirect('alliance', alliance_id=str(alliance_id))
+    else:
+        alliances = Alliance.objects.all().select_related('founder')
+        return render(request, 'alliances.html', {'alliances': alliances})
+
 @login_required()
 def alliance(request,alliance_id):
-    alliance=get_object_or_404(Alliance,pk=alliance_id)
+    alliance=get_object_or_404(Alliance, pk=alliance_id)
     airline_list=alliance.members.all()
     return render(request, 'alliance.html', {'airlines':airline_list, 'alliance':alliance})
 
