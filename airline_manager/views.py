@@ -4,8 +4,10 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from airline_manager.forms import AirlineForm
-from airline_manager.models import Airline, Airport, PlaneType, Plane, Alliance, Hub, Line, PlayerLine, Flight, DailyFlight, Success
+from airline_manager.models import Airline, Airport, PlaneType, Plane, Alliance, Hub, Line, PlayerLine, Flight, \
+    DailyFlight, Success
 from django.shortcuts import get_object_or_404
+
 
 def index(request):
     if request.user.is_authenticated():
@@ -13,9 +15,10 @@ def index(request):
 
     return render(request, 'index.html', {})
 
+
 def register(request):
     if request.user.is_authenticated():
-        if not(request.user.airline.exists()):
+        if not (request.user.airline.exists()):
             active = 2
             if request.method == 'POST':
                 form = AirlineForm(request.POST)
@@ -39,8 +42,8 @@ def register(request):
             if form.is_valid():
                 form.save()
                 new_user = authenticate(username=form.cleaned_data['username'],
-                                    password=form.cleaned_data['password1'],
-                                    )
+                                        password=form.cleaned_data['password1'],
+                                        )
                 login(request, new_user)
                 return redirect('registration')
 
@@ -54,12 +57,12 @@ def register(request):
 def register_hub(request):
     error = None
     if request.method == 'POST':
-        airportId = request.POST['airport']
+        airport_id = request.POST['airport']
         airline = request.user.airline.first()
-        airport = Airport.objects.filter(pk=airportId)
+        airport = Airport.objects.filter(pk=airport_id)
         if airport.exists():
             airport = airport.first()
-            if not(Hub.objects.filter(owner=airline, airport=airport).exists()):
+            if not (Hub.objects.filter(owner=airline, airport=airport).exists()):
                 hub = Hub(owner=airline, airport=airport)
                 hub.save()
                 return redirect('home')
@@ -68,13 +71,14 @@ def register_hub(request):
 
     airports = Airport.objects.all()
 
-    return render(request, 'registration/registration-hub.html', {'airports':airports, 'error': error})
+    return render(request, 'registration/registration-hub.html', {'airports': airports, 'error': error})
 
 
 @login_required()
 def profile(request):
     airline = request.user.airline.all().select_related('alliance').first()
     return render(request, 'profile.html', {'airline': airline})
+
 
 @login_required()
 def planes_list(request):
@@ -84,6 +88,7 @@ def planes_list(request):
     else:
         # todo. Redirect to the url where the user can buy his first plane
         return redirect('home')
+
 
 @login_required()
 def user_home(request):
@@ -102,10 +107,10 @@ def buy_hub(request):
 @login_required()
 def buy_hub_save(request):
     if request.method == 'POST':
-        airportId=request.POST['airport']
+        airportId = request.POST['airport']
         airline = request.user.airline.first()
         if Airport.objects.filter(pk=airportId).exists():
-            if not(Hub.objects.filter(owner=airline, airport_id = airportId).exists()):
+            if not (Hub.objects.filter(owner=airline, airport_id=airportId).exists()):
                 hub = Hub()
                 hub.owner_id = airline.pk
                 hub.airport_id = airportId
@@ -117,6 +122,7 @@ def buy_hub_save(request):
     else:
         return redirect('buy-hub')
 
+
 @login_required()
 def alliance_home(request):
     alliance_id = request.user.airline.first().alliance_id
@@ -126,11 +132,12 @@ def alliance_home(request):
         alliances = Alliance.objects.all().select_related('founder')
         return render(request, 'alliances.html', {'alliances': alliances})
 
+
 @login_required()
-def alliance(request,alliance_id):
-    alliance=get_object_or_404(Alliance, pk=alliance_id)
-    airline_list=alliance.members.all()
-    return render(request, 'alliance.html', {'airlines':airline_list, 'alliance':alliance})
+def alliance(request, alliance_id):
+    alliance = get_object_or_404(Alliance, pk=alliance_id)
+    airline_list = alliance.members.all()
+    return render(request, 'alliance.html', {'airlines': airline_list, 'alliance': alliance})
 
 
 @login_required()
