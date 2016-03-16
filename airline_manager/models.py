@@ -18,6 +18,10 @@ class Success(models.Model):
         return self.name
 
 
+def empty_history():
+    return [0]*7
+
+
 class Airline(models.Model):
     name = models.CharField(max_length=45, unique=True)
     money = models.BigIntegerField(default=100000000)
@@ -30,8 +34,8 @@ class Airline(models.Model):
     research_queue = models.ForeignKey("Research", null=True, blank=True, related_name="airlines_currently_researching")
     research_end = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     success = models.ManyToManyField(Success, blank=True)
-    rank_history = ArrayField(models.BigIntegerField(), size=7)
-    income_history = ArrayField(models.BigIntegerField(), size=7)
+    rank_history = ArrayField(models.BigIntegerField(), size=7, default=empty_history)
+    income_history = ArrayField(models.BigIntegerField(), size=7, default=empty_history)
 
     def __str__(self):
         return self.name
