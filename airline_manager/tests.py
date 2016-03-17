@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from airline_manager.forms import AirlineForm, ConfigurationForm
 from airline_manager.models import Airline, Alliance, Airport, PlaneType, Line, Plane, Hub
+from django.core.urlresolvers import reverse
 
 
 class AllianceTestCase(TestCase):
@@ -91,6 +92,9 @@ class RegistrationViewTestCase(TestCase):
     def setUp(self):
         self.user1 = User.objects.create_user(username="o1", password="testuser")
         self.user2 = User.objects.create_user(username="o2", password="testuser")
+        self.a1 = Airline.objects.create(name="Airline 1", owner=self.user2, money=2)
+        self.airport1 = Airport.objects.create(name="Airport 1", iata="A11", city="City 1")
+        self.hub1 = Hub.objects.create(airport=self.airport1, owner=self.a1)
 
     def test_page_loads(self):
         """Register page loads"""
@@ -117,6 +121,35 @@ class RegistrationViewTestCase(TestCase):
         self.client.login(username="o1", password="testuser")
         response = self.client.post('/register/', {'name': "Test"})
         self.assertRedirects(response, '/register/hub/')
+
+    def test_redirect_home(self):
+        self.client.login(username="o2", password="testuser")
+        response = self.client.get('/register/')
+        self.assertRedirects(response, reverse('home'))
+
+
+class PlaneListViewTestCase(TestCase):
+
+    def setUp(self):
+        self.user1 = User.objects.create_user(username="o1", password="testuser")
+        self.user2 = User.objects.create_user(username="o2", password="testuser")
+        self.a1 = Airline.objects.create(name="Airline 1", owner=self.user1, money=2)
+        self.a2 = Airline.objects.create(name="Airline 2", owner=self.user2, money=2)
+        self.airport1 = Airport.objects.create(name="Airport 1", iata="A11", city="City 1")
+        self.hub1 = Hub.objects.create(airport=self.airport1, owner=self.a1)
+        self.hub2 = Hub.objects.create(airport=self.airport1, owner=self.a2)
+        self.planeModel1 = PlaneType.objects.create(name="A380", manufacturer=0, range=200, max_seats=200, price=20000)
+        self.plane1 = Plane.objects.create(name="AF547", type=self.planeModel1, airline=self.a1, first=0, second=0, third=200, hub=self.hub1)
+
+    def test_page_loads(self):
+        self.client.login(username="o1", password="testuser")
+        response = self.client.get(reverse('planes'))
+        self.assertEquals(response.status_code,200)
+
+    def test_page_redirects(self):
+        self.client.login(username="o2", password="testuser")
+        response = self.client.get(reverse('planes'))
+        self.assertEquals(response.status_code, 302)
 
 
 class ProfileViewTestCase(TestCase):
