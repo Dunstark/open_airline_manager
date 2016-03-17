@@ -1,5 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from airline_manager.forms import AirlineForm, ConfigurationForm
 from airline_manager.models import Airline, Alliance, Airport, PlaneType, Line, Plane, Hub
 
 
@@ -85,17 +87,39 @@ class IndexViewTestCase(TestCase):
         self.assertEquals(response.status_code, 200)
 
 
-
 class RegistrationViewTestCase(TestCase):
+    def setUp(self):
+        self.user1 = User.objects.create_user(username="o1", password="testuser")
+        self.user2 = User.objects.create_user(username="o2", password="testuser")
 
     def test_page_loads(self):
         """Register page loads"""
         response = self.client.get('/register/')
         self.assertEquals(response.status_code, 200)
+        form = UserCreationForm()
+        self.assertEquals(response.context['form'].initial, form.initial)
+        self.assertEquals(response.context['active'], 1)
+
+    def test_step1(self):
+        response = self.client.post('/register/', {'username': "u1", 'password1': "testuser", 'password2': "testuser"})
+        self.assertRedirects(response, '/register/')
+        self.assertIn('_auth_user_id', self.client.session)
+
+    def test_step2_start(self):
+        self.client.login(username="o1", password="testuser")
+        response = self.client.get('/register/')
+        form = AirlineForm()
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.context['form'].initial, form.initial)
+        self.assertEquals(response.context['active'], 2)
+
+    def test_step2(self):
+        self.client.login(username="o1", password="testuser")
+        response = self.client.post('/register/', {'name': "Test"})
+        self.assertRedirects(response, '/register/hub/')
 
 
 class ProfileViewTestCase(TestCase):
-
     def setUp(self):
         self.user1 = User.objects.create_user(username="o1", password="testuser")
 
