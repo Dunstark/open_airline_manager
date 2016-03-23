@@ -2,3 +2,4 @@
 *.sqlite3
 /.idea/
 *.pyc
+/airline_manager/migrations/
