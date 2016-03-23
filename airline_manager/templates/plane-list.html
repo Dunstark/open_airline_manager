@@ -21,7 +21,7 @@
             <tr>
                 <td>{{ plane.name }} ({{ plane.type }})</td>
                 <td class="paper-table-numeric">{{ plane.first }}/{{ plane.second }}/{{ plane.third }}</td>
-                <td class="paper-table-numeric">2.44</td>
+                <td class="paper-table-numeric">{{ plane.type.consumption }}</td>
                 <td>
                     <a href="{% url "plane-configuration" plane.id %}"><i class="material-icons">airline_seat_recline_normal</i></a>
                     <a href="{% url "plane-planning" plane.id %}"><i class="material-icons">flight_takeoff</i></a>
