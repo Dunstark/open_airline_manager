@@ -78,9 +78,11 @@ class Airline(models.Model):
 
     def debit(self, amount):
         self.money += amount
+        self.save()
 
     def credit(self, amount):
         self.money -= amount
+        self.save()
 
 
 class Alliance(models.Model):

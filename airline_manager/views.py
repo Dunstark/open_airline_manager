@@ -294,7 +294,7 @@ def buy_plane_after_hub(request):
     if request.method == 'POST':
         hub_id = request.POST['hub_id']
         hub = Hub.objects.filter(pk=hub_id)
-        if (hub.exists()) :
+        if hub.exists():
             planetypes = PlaneType.objects.all()
             return render(request, 'buy-plane-typelist.html', {'planetypes': planetypes, 'hub_id': hub_id})
 
@@ -316,12 +316,12 @@ def buy_plane_save(request):
                 hub = hub.first()
                 if int(quantity * type.price) < airline.money:
                     airline.credit(int(quantity * type.price))
-                    airline.save()
                     for i in range(0,quantity):
                         plane = Plane()
                         plane.name = str(i)
                         plane.type = type
                         plane.airline = airline
+                        plane.hub_id = int(hub_id)
                         plane.first = 0
                         plane.second = 0
                         plane.third = type.max_seats
@@ -330,9 +330,9 @@ def buy_plane_save(request):
                     return redirect('home')
 
                 else:
-                    error = 'You don\'t have enough money '
+                    error = "You don't have enough money "
             else:
-                error = 'Plane type doesn\'t exist,please choose another type'
+                error = "Plane type doesn't exist,please choose another type"
         else:
-            error = 'Hub doesn\'t exist, please choose another hub'
+            error = "Hub doesn't exist, please choose another hub"
     return redirect('buy-plane')
