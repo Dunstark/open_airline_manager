@@ -10,6 +10,7 @@ from airline_manager.models import Airline, Airport, PlaneType, Plane, Alliance,
 from django.shortcuts import get_object_or_404
 import datetime
 from django.utils.translation import ugettext as _
+from django.utils import timezone
 
 
 def index(request):
@@ -282,3 +283,56 @@ def add_achievement(airline, achievement_id):
     achievement = Success.objects.get(pk=achievement_id)
     if not airline.success.filter(pk=achievement_id):
         airline.success.add(achievement)
+
+@login_required()
+def buy_plane(request):
+    hubs = Hub.objects.filter(owner=request.user.airline.first())
+    return render(request, 'buy-plane-hublist.html', {'hubs': hubs})
+
+@login_required()
+def buy_plane_after_hub(request):
+    if request.method == 'POST':
+        hub_id = request.POST['hub_id']
+        hub = Hub.objects.filter(pk=hub_id)
+        if (hub.exists()) :
+            planetypes = PlaneType.objects.all()
+            return render(request, 'buy-plane-typelist.html', {'planetypes': planetypes, 'hub_id': hub_id})
+
+    return redirect('buy-plane')
+
+@login_required()
+def buy_plane_save(request):
+    error = None
+    airline = request.user.airline.first()
+    if request.method == 'POST':
+        hub_id = request.POST['hub_id']
+        type_id = request.POST['planetype_id']
+        quantity = int(request.POST['quantity'])
+        hub = Hub.objects.filter(pk=hub_id, owner=airline)
+        type = PlaneType.objects.filter(pk=type_id)
+        if hub.exists():
+            if type.exists():
+                type = type.first()
+                hub = hub.first()
+                if int(quantity * type.price) < airline.money:
+                    airline.credit(int(quantity * type.price))
+                    airline.save()
+                    for i in range(0,quantity):
+                        plane = Plane()
+                        plane.name = str(i)
+                        plane.type = type
+                        plane.airline = airline
+                        plane.first = 0
+                        plane.second = 0
+                        plane.third = type.max_seats
+                        plane.available_on = timezone.now()
+                        plane.save()
+                    return redirect('home')
+
+                else:
+                    error = 'You don\'t have enough money '
+            else:
+                error = 'Plane type doesn\'t exist,please choose another type'
+        else:
+            error = 'Hub doesn\'t exist, please choose another hub'
+    return redirect('buy-plane')

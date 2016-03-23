@@ -39,4 +39,8 @@ urlpatterns = [
     url(r'^research/$', views.research_list, name='research'),
     url(r'^leaderboard/$', views.airline_leaderboard, name='leaderboard'),
     url(r'^testing/success$', views.test_success, name='test-success'),
+    url(r'^planes/buy/$',views.buy_plane,name='buy-plane'),
+    url(r'^planes/buy/type/$',views.buy_plane_after_hub,name='buy-plane-type'),
+    url(r'^planes/buy/type/save/$',views.buy_plane_save,name='buy-plane-save')
 ]
+

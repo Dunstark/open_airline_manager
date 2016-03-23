@@ -1,0 +1,49 @@
+{% extends "template.html" %}
+{% load i18n %}
+{% load gravatar %}
+{% load static from staticfiles %}
+
+{% block content %}
+    <div class="paper-card paper-shadow-2dp">
+        <div class="paper-table-title">Select Plane Type</div>
+        <table class="paper-table paper-table--responsive">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Manufacturer</th>
+                <th>Range</th>
+                <th>Max_seats</th>
+                <th>Price</th>
+                <th>Consumption</th>
+                <th>Number</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for planetype in planetypes %}
+            <tr>
+                <td>{{ planetype.name }} </td>
+                <td>{{ planetype.get_manufacturer_display}}</td>
+                <td>{{ planetype.range }}</td>
+                <td>{{ planetype.max_seats}}</td>
+                <td>{{ planetype.price }}</td>
+                <td>{{ planetype.consumption}}</td>
+                <td><form method="post" action="{% url 'buy-plane-save' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="hub_id" value="{{ hub_id }}">
+                        <input type="hidden" name="planetype_id" value="{{ planetype.pk }}">
+                        <select name="quantity">
+                            {% for i in "xxxxxxxxxx" %}
+                                <option value="{{ forloop.counter0 }}">{{ forloop.counter0 }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="Buy" class="paper-button paper-button--colored">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+</div>
+{% endblock %}
