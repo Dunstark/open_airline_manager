@@ -7,7 +7,7 @@ from airline_manager.forms import AirlineForm
 from airline_manager.models import Airline, Airport, PlaneType, Plane, Alliance, Hub, Line, PlayerLine, Flight, \
     DailyFlight, Success
 from django.shortcuts import get_object_or_404
-
+from django.utils.translation import ugettext as _
 
 def index(request):
     if request.user.is_authenticated():
@@ -164,19 +164,31 @@ def add_achievement(airline, achievement_id):
 
 @login_required()
 def hub_list(request):
-    if request.method == 'POST':
-        name=request.user.airline.first()
-        hub=Hub.objects.filter(owner=name)
-
-    return render(request, 'hub-list.html',{'hubs':hub})
+    airlineID = request.user.airline.first().owner_id
+    hubs = Hub.objects.filter(owner_id=airlineID)
+    return render(request, 'hub-list.html',{'hubs': hubs})
 
 @login_required()
-def playerline(request):
-    if request.method == 'POST':
-        hubID=request.POST['hub']
-        airport=Hub.objects.filter(pk=hubID)
-        line =Line.objects.filter(start_point=airport)
-        if line.lines_using.exists():
-            playerline=line.lines_using.all()
+def playerline(request, hub_id):
+    airport=Hub.objects.get(pk=hub_id).airport #hubs belong to this user
+    airline=request.user.airline.first()
+    playerlines=PlayerLine.objects.filter(airline=airline,line__start_point=airport)
+    return render(request,'playerline.html',{'playerlines':playerlines})
 
-    return render(request,'playerline.html',{'playerlines':playerline})
+@login_required()
+def buy_line(request, hub_id):
+    error = None
+    airline=request.user.airline.first()
+    if request.method == 'POST':
+        line_id=request.POST['line']
+        if not(PlayerLine.objects.filter(airline=airline, line_id=line_id).exists()):
+            playerline=PlayerLine(airline_id=airline.pk, line_id=line_id, price_first=0, price_second=0,price_third=0)
+            playerline.save()
+            return redirect('home')
+        else:
+            error = _('You already own this line, please choose another one.')
+
+    airport=Hub.objects.get(pk=hub_id).airport #hub belong to this user
+    playerlines=PlayerLine.objects.filter(airline=airline,line__start_point=airport)#lines which client already buy
+    lines=Line.objects.filter(start_point=airport).exclude(id__in=playerlines.values_list('line_id')) #lines belong to this airport
+    return render(request,'buy-line.html', {'hub_id':hub_id,'error':error,'lines':lines})

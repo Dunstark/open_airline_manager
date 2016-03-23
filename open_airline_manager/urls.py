@@ -28,11 +28,12 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^profile/$', views.profile, name='profile'),
     url(r'^planes/$', views.planes_list, name='planes'),
-    url(r'^hub/$', views.buy_hub, name='buy-hub'),
-    url(r'^hubs/buy/$', views.buy_hub_save, name='buy-hub-save'),
+    url(r'^hubs/buy/$', views.buy_hub, name='buy-hub'),
+    url(r'^hubs/buy/save/$', views.buy_hub_save, name='buy-hub-save'),
     url(r'^alliance/$', views.alliance_home, name='alliance-home'),
     url(r'^alliance/(?P<alliance_id>[0-9]+)/$', views.alliance, name='alliance'),
     url(r'^testing/success$', views.test_success, name='test-success'),
-    url(r'^hublist/',views.hub_list,name='hublist'),
-    url(r'^playerline/$',views.playerline, name='playerline')
+    url(r'^hubs/$',views.hub_list,name='hublist'),
+    url(r'^hubs/(?P<hub_id>[0-9]+)/$',views.playerline, name='hub-view'),
+    url(r'^lines/buy/(?P<hub_id>[0-9]+)/$',views.buy_line, name='buy-line'),
 ]
