@@ -155,7 +155,10 @@ def user_home(request):
     if not Hub.objects.filter(owner=airline).exists():
         return redirect('registration-hub')
     flights = Flight.objects.filter(line__airline=airline).select_related('line__line', 'plane')[:10]
-    news = News.objects.all().latest('date')
+    try:
+        news = News.objects.all().latest('date')
+    except News.DoesNotExist:
+        news = None
     return render(request, 'home.html', {'airline': airline, 'flights': flights, 'news': news})
 
 

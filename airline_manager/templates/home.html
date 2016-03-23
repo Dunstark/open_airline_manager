@@ -83,12 +83,14 @@
         </div>
     </div>
 
+    {% if news %}
     <div class="page-row">
         <div class="paper-card paper-shadow-2dp">
             <span class="paper-card-title">Latest News: {{ news.title }}</span>
                 {{ news.content|linebreaks }}
         </div>
     </div>
+    {% endif %}
 
 
 {% endblock %}
