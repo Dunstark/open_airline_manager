@@ -1,0 +1,17 @@
+{% extends "template.html" %}
+{% load i18n %}
+
+
+{% block content %}
+    {% blocktrans %}
+    <p>your airports</p>
+    {% endblocktrans %}
+    {% for hub in hubs %}
+        <div>
+        {{ hub }}
+        <a href="{% url 'hub-view' hub.pk %}">{% trans 'View' %}</a>
+        <a href="{% url 'buy-line' hub.pk %}">{% trans 'Buy a line' %}</a>
+        </div>
+    {% endfor %}
+
+{% endblock %}

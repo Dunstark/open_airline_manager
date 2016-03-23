@@ -18,6 +18,10 @@ class Success(models.Model):
         return self.name
 
 
+def empty_history():
+    return [0]*7
+
+
 class Airline(models.Model):
     name = models.CharField(max_length=45, unique=True)
     money = models.BigIntegerField(default=100000000)
@@ -27,11 +31,11 @@ class Airline(models.Model):
     last_marketing = models.DateTimeField(default=timezone.now, blank=True, null=True)
     last_updated = models.DateTimeField(default=timezone.now)
     research = models.ManyToManyField("Research", blank=True, related_name="airlines")
-    research_queue = models.ForeignKey("Research", null=True, related_name="airlines_currently_researching")
+    research_queue = models.ForeignKey("Research", null=True, blank=True, related_name="airlines_currently_researching")
     research_end = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     success = models.ManyToManyField(Success, blank=True)
-    rank_history = ArrayField(models.BigIntegerField(), size=7)
-    income_history = ArrayField(models.BigIntegerField(), size=7)
+    rank_history = ArrayField(models.BigIntegerField(), size=7, default=empty_history)
+    income_history = ArrayField(models.BigIntegerField(), size=7, default=empty_history)
 
     def __str__(self):
         return self.name
@@ -94,6 +98,11 @@ class Alliance(models.Model):
     @property
     def member_funds(self):
         return self.members.aggregate(Sum('money'))['money__sum']
+
+
+class AllianceRequest(models.Model):
+    airline = models.ForeignKey(Airline, on_delete=models.CASCADE, related_name="alliance_request")
+    alliance = models.ForeignKey(Alliance, on_delete=models.CASCADE, related_name="join_requests")
 
 
 class Loan(models.Model):
@@ -180,6 +189,7 @@ class Plane(models.Model):
     name = models.CharField(max_length=8)
     type = models.ForeignKey(PlaneType, on_delete=models.CASCADE)
     airline = models.ForeignKey(Airline, on_delete=models.CASCADE)
+    hub = models.ForeignKey(Hub, on_delete=models.CASCADE)
     first = models.IntegerField()
     second = models.IntegerField()
     third = models.IntegerField()

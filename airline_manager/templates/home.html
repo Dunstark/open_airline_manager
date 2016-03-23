@@ -16,14 +16,14 @@
                     <i class="material-icons oam-airline-icon">star</i>
                     <div class="oam-airline-text-content">
                         <div class="oam-airline-label">Rank:</div>
-                        <div class="oam-airline-value">1500</div>
+                        <div class="oam-airline-value">{{ airline.rank_history.6 }}</div>
                     </div>
                 </div>
                 <div class="oam-airline-text">
                     <i class="material-icons oam-airline-icon">euro_symbol</i>
                     <div class="oam-airline-text-content">
                         <div class="oam-airline-label">Income:</div>
-                        <div class="oam-airline-value">{{ 228000000|intcomma }}</div>
+                        <div class="oam-airline-value">{{ airline.income_history.6|intcomma }}</div>
                     </div>
                 </div>
                 {% if airline.alliance %}
@@ -108,8 +108,11 @@
 {% endblock dialog %}
 
 {% block toast %}
-  <div id="paper-toast" class="paper-toast hidden paper-toast-hidden">
+  <div id="paper-toast" class="paper-toast {% if not achievement %}hidden paper-toast-hidden{% endif %}">
     <div class="paper-toast-content">
+        {% if achievement %}
+            {{ achievement.name }}
+        {% endif %}
     </div>
   </div>
 {% endblock toast %}
@@ -131,7 +134,7 @@
                 pointHoverBackgroundColor: "#E8F5E9",
                 pointHoverBorderColor: "#E8F5E9",
                 pointHoverBorderWidth: 2,
-                data: [152000000, 235000000, 302500000, 267000000, 251000000, 301000000, 228000000]
+                data: {{ airline.income_history }}
             }
         ]
     };
@@ -150,7 +153,7 @@
                 pointHoverBackgroundColor: "#E8EAF6",
                 pointHoverBorderColor: "#E8EAF6",
                 pointHoverBorderWidth: 2,
-                data: [28, 48, 40, 19, 86, 27, 90]
+                data: {{ airline.rank_history }}
             }
         ]
     };

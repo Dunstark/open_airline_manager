@@ -1,0 +1,23 @@
+{% extends "template.html" %}
+{% load i18n %}
+
+{% block content %}
+    <div>
+    {% if error %}
+        {{ error }}
+    {% endif %}
+    </div>
+    <div>
+    {% for line in lines %}
+        {{ line }}
+        <form method="post" action="{% url 'buy-line' hub_id %}">
+            <input type="hidden" name="line" value="{{ line.pk }}">
+            <input type="submit" value="buy">
+            {% csrf_token %}
+        </form>
+
+    {% endfor %}
+    </div>
+
+{% endblock %}
+
