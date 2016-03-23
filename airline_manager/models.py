@@ -18,6 +18,10 @@ class Success(models.Model):
         return self.name
 
 
+def empty_history():
+    return [0]*7
+
+
 class Airline(models.Model):
     name = models.CharField(max_length=45, unique=True)
     money = models.BigIntegerField(default=100000000)
@@ -28,10 +32,10 @@ class Airline(models.Model):
     last_updated = models.DateTimeField(default=timezone.now)
     research = models.ManyToManyField("Research", blank=True, related_name="airlines")
     research_queue = models.ForeignKey("Research", null=True, blank=True, related_name="airlines_currently_researching")
-    research_end = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    research_end = models.DateTimeField(default=datetime.datetime.now, blank=True, null=True)
     success = models.ManyToManyField(Success, blank=True)
-    rank_history = ArrayField(models.BigIntegerField(), size=7)
-    income_history = ArrayField(models.BigIntegerField(), size=7)
+    rank_history = ArrayField(models.BigIntegerField(), size=7, default=empty_history)
+    income_history = ArrayField(models.BigIntegerField(), size=7, default=empty_history)
 
     def __str__(self):
         return self.name
@@ -96,6 +100,11 @@ class Alliance(models.Model):
         return self.members.aggregate(Sum('money'))['money__sum']
 
 
+class AllianceRequest(models.Model):
+    airline = models.ForeignKey(Airline, on_delete=models.CASCADE, related_name="alliance_request")
+    alliance = models.ForeignKey(Alliance, on_delete=models.CASCADE, related_name="join_requests")
+
+
 class Loan(models.Model):
     borrower = models.ForeignKey(Airline, on_delete=models.CASCADE, related_name="loans")
     amount = models.IntegerField()
@@ -111,7 +120,7 @@ class Airport(models.Model):
     tax = models.IntegerField(default=10)
 
     def __str__(self):
-        return self.iata + self.city + " - " + self.name
+        return self.iata + " " + self.city + " - " + self.name
 
 
 class Hub(models.Model):
@@ -130,6 +139,10 @@ class Line(models.Model):
     def __str__(self):
         return str(self.start_point) + " - " + str(self.end_point)
 
+    @cached_property
+    def short_name(self):
+        return str(self.end_point)
+
 
 class PlayerLine(models.Model):
     airline = models.ForeignKey(Airline, on_delete=models.CASCADE, related_name="lines")
@@ -137,6 +150,9 @@ class PlayerLine(models.Model):
     price_first = models.IntegerField()
     price_second = models.IntegerField()
     price_third = models.IntegerField()
+
+    def __str__(self):
+        return str(self.line)
 
 
 MANUFACTURER_CHOICES = (
@@ -159,6 +175,7 @@ class PlaneType(models.Model):
     max_seats = models.IntegerField()
     price = models.PositiveIntegerField()
     consumption = models.FloatField(default=4)
+    speed = models.IntegerField(default=1020)
 
     def __str__(self):
         return self.get_manufacturer_display() + " " + self.name
@@ -210,16 +227,20 @@ class Plane(models.Model):
 
 class Flight(models.Model):
     plane = models.ForeignKey(Plane, on_delete=models.CASCADE, related_name="flights")
-    line = models.ForeignKey(Line, on_delete=models.CASCADE)
+    line = models.ForeignKey(PlayerLine, on_delete=models.CASCADE)
     day = models.IntegerField(default=0)
     start = models.TimeField(default=datetime.datetime.now)
 
+    def __str__(self):
+        return str(self.line) + " - Day " + str(self.day) + " " + str(self.start)
+
 
 class DailyFlight(models.Model):
-    plane = models.ForeignKey(Plane, on_delete=models.CASCADE, related_name="today_flights")
-    line = models.ForeignKey(Line, on_delete=models.CASCADE)
-    start = models.TimeField(default=datetime.datetime.now)
+    flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name="daily_versions")
     accounted_for = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.flight)
 
 
 class News(models.Model):
@@ -237,3 +258,6 @@ class Research(models.Model):
     security = models.IntegerField()
     effectiveness = models.IntegerField()
     gains = models.IntegerField()
+
+    def __str__(self):
+        return self.title

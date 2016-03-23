@@ -25,6 +25,33 @@
         {% endfor %}
         </tbody>
     </table>
+    {% if is_founder and requests %}
+        <div class="paper-card-content profile-card-content">
+            <div class="title">{% trans "Requests" %}</div>
+        </div>
+        <table class="paper-table paper-table--responsive">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for req in requests %}
+            <tr>
+                <td>{{ req.airline }}</td>
+                <td>
+                    <form method="post" action="{% url 'allow-into-alliance' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="req_id" value="{{ req.pk }}">
+                        <input type="submit" value="Accept" class="paper-button paper-button--colored">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 </div>
 
 {% endblock %}

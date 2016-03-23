@@ -1,0 +1,36 @@
+{% extends "template.html" %}
+{% load i18n %}
+{% load gravatar %}
+{% load static from staticfiles %}
+
+{% block content %}
+    <div class="paper-card paper-shadow-2dp">
+        <div class="paper-table-title">Planes</div>
+        <table class="paper-table paper-table--responsive">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Founder</th>
+                <th>Rank</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for alliance in alliances %}
+            <tr>
+                <td>{{ alliance }}</td>
+                <td>{{ alliance.founder }}</td>
+                <td class="paper-table-numeric">{{ alliance.rank }}</td>
+                <td>
+                    <a href="{% url 'join-alliance' alliance.pk %}" class="paper-button paper-button--colored">
+                        Join
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+{% endblock %}

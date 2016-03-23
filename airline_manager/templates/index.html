@@ -38,16 +38,55 @@
             <img src="{% static "img/logo.png" %}" alt="Open Airline Manager" class="oam-index-header-logo">
             <h2 class="oam-index-header-title">Open Airline Manager</h2>
             <div class="oam-index-header-button">
-                <a href="{% url 'registration' %}" class="paper-button paper-button-raised paper-button--colored paper-button--large paper-shadow-8dp">{% trans "Join Now!" %}</a>
+                <a href="{% url 'registration' %}" class="paper-button paper-button-raised paper-button--accent paper-button--large paper-shadow-8dp">{% trans "Join Now!" %}</a>
+                <a href="{% url 'login' %}" class="paper-button paper-button-raised paper-button--colored paper-button--large paper-shadow-8dp">{% trans "Login" %}</a>
+
             </div>
             <div class="oam-index-header-credit">"Washington Dulles International Airport at Dusk" by Joe Ravi licensed under <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC-BY-SA 3.0</a></div>
         </header>
 
 
-        <main class="page-row page-row-expanded">
-            <div class="main-content">
-              {% block content %}
-              {% endblock %}
+        <main class="page-row page-row-expanded main-content">
+            <div class="selling-point">
+                <div class="selling-point-content">
+                    <div class="selling-point-title">
+                        {% trans "Compete with other players" %}
+                    </div>
+                    <div class="selling-point-desc">
+                        {% blocktrans %}Play with thousands of players from all over the world. Become the largest company
+                            and dominate the market. Form alliances with other players to achieve your goals!
+                        {% endblocktrans %}
+                    </div>
+                </div>
+                <img src="{% static "img/airport_terminal.jpg" %}" alt="Terminal" class="selling-point-img">
+            </div>
+
+            <div class="selling-point">
+                <div class="selling-point-content">
+                    <div class="selling-point-title">
+                        {% trans "Improve your company" %}
+                    </div>
+                    <div class="selling-point-desc">
+                        {% blocktrans %}Use research to improve the quality of your flights or to become more efficient.
+                            Invest in marketing campaigns to improve your brand recognition.
+                        {% endblocktrans %}
+                    </div>
+                </div>
+                <img src="{% static "img/airport_terminal.jpg" %}" alt="Terminal" class="selling-point-img">
+            </div>
+
+            <div class="selling-point">
+                <div class="selling-point-content">
+                    <div class="selling-point-title">
+                        {% trans "Compete with other players" %}
+                    </div>
+                    <div class="selling-point-desc">
+                        {% blocktrans %}Play with thousands of players from all over the world. Become the largest company
+                            and dominate the market. Form alliances with other players to achieve your goals!
+                        {% endblocktrans %}
+                    </div>
+                </div>
+                <img src="{% static "img/airport_terminal.jpg" %}" alt="Terminal" class="selling-point-img">
             </div>
         </main>
 
