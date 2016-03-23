@@ -1,0 +1,37 @@
+
+{% extends "template.html" %}
+{% load i18n %}
+{% load gravatar %}
+{% load static from staticfiles %}
+
+{% block content %}
+    <div class="paper-card paper-shadow-2dp">
+        <div class="paper-table-title">Select Hubs</div>
+        <table class="paper-table">
+            <thead>
+            <tr>
+                <th>IATA</th>
+                <th>Name</th>
+                <th>City</th>
+                <th>Choice</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for hub in hubs %}
+            <tr>
+                <td>{{hub.airport.iata }} </td>
+                <td>{{hub.airport.name}}</td>
+                <td>{{hub.airport.city}}</td>
+                <td><form method ="post" action="{%url 'buy-plane-type'%}">
+                    {% csrf_token %}
+                    <input type="hidden" name="hub_id" value="{{ hub.pk }}">
+                    <input type="submit" value="Select">
+                </form></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+</div>
+
+{% endblock %}

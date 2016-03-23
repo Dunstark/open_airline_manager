@@ -1,0 +1,28 @@
+{% extends "template.html" %}
+{% load i18n %}
+{% load gravatar %}
+{% load static from staticfiles %}
+
+{% block content %}
+    <div class="paper-card paper-shadow-2dp">
+        <div class="paper-table-title">{% trans "Leaderboard" %}</div>
+        <table class="paper-table paper-table--responsive">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Rank</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for airline in airlines %}
+            <tr>
+                <td>{{ airline }}</td>
+                <td class="paper-table-numeric">{{ airline.rank}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+</div>
+
+{% endblock %}

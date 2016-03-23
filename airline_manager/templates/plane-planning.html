@@ -1,0 +1,49 @@
+{% extends "template.html" %}
+{% load i18n %}
+{% load gravatar %}
+{% load static from staticfiles %}
+{% load widget_tweaks %}
+{% block content %}
+    <a class="paper-button paper-button-raised paper-button--colored"><i class="material-icons">airplanemode_active</i> Buy plane</a>
+    <div class="paper-card paper-shadow-2dp">
+        <div class="paper-card-title">
+        {% trans "Assign to a line" %}
+    </div>
+
+    <div class="paper-card-content">
+
+    {% for error in form.non_field_errors %}
+        <div class="paper-input-error">{{ error }}</div>
+    {% endfor %}
+
+
+    <form method="post" action="{% url 'plane-planning' plane_id %}">
+    {% csrf_token %}
+    {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
+
+    {% for field in form.visible_fields %}
+        <div class="paper-input-group {% if field.errors %}paper-input-group--error{% endif %}">
+            <label class="paper-label">{{field.label_tag}}</label>
+            {% render_field field class+="paper-input" %}
+        </div>
+        {% if field.errors %}
+            <div class="paper-input-error">
+                {% for error in field.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endfor %}
+    </div>
+    <div class="paper-card-actions">
+        <button type="submit" class="paper-button paper-button--colored">
+            {% trans "Assign" %}
+        </button>
+    </div>
+    </form>
+
+</div>
+
+{% endblock %}

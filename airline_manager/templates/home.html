@@ -70,35 +70,27 @@
                 </tr>
                 </thead>
                 <tbody>
+                {% for flight in flights %}
                 <tr>
-                    <td>CDG</td>
-                    <td>NA544</td>
-                    <td>LAX</td>
-                    <td>10h45</td>
+                    <td>{{ flight.line.line.start_point.iata }}</td>
+                    <td>{{ flight.plane.name }}</td>
+                    <td>{{ flight.line.line.end_point.iata }}</td>
+                    <td>{{ flight.start }}</td>
                 </tr>
-                <tr>
-                    <td>CDG</td>
-                    <td>NA544</td>
-                    <td>JFK</td>
-                    <td>10h59</td>
-                </tr>
-                <tr>
-                    <td>LAX</td>
-                    <td>NA201</td>
-                    <td>SFO</td>
-                    <td>10h35</td>
-                </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 
+    {% if news %}
     <div class="page-row">
         <div class="paper-card paper-shadow-2dp">
-            <span class="paper-card-title">News</span>
-            {% lorem 3 p %}
+            <span class="paper-card-title">Latest News: {{ news.title }}</span>
+                {{ news.content|linebreaks }}
         </div>
     </div>
+    {% endif %}
 
 
 {% endblock %}

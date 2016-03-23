@@ -1,13 +1,17 @@
+import math
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from airline_manager.forms import AirlineForm
+from airline_manager.forms import AirlineForm, ConfigurationForm, LineChoiceForm
 from airline_manager.models import Airline, Airport, PlaneType, Plane, Alliance, Hub, Line, PlayerLine, Flight, \
-    DailyFlight, Success
+    DailyFlight, Success, AllianceRequest, Research, News
 from django.shortcuts import get_object_or_404
+import datetime
 from django.utils.translation import ugettext as _
+from django.utils import timezone
+
 
 def index(request):
     if request.user.is_authenticated():
@@ -18,7 +22,7 @@ def index(request):
 
 def register(request):
     if request.user.is_authenticated():
-        if not (request.user.airline.exists()):
+        if not (request.user.airline.all().exists()):
             active = 2
             if request.method == 'POST':
                 form = AirlineForm(request.POST)
@@ -91,33 +95,97 @@ def planes_list(request):
 
 
 @login_required()
+def plane_configuration(request, plane_id):
+    plane = get_object_or_404(Plane, pk=plane_id)
+    if request.method == 'POST':
+        form = ConfigurationForm(request.POST, instance=plane)
+        if form.is_valid():
+            form.save()
+            return redirect('planes')
+    else:
+        form = ConfigurationForm(instance=plane)
+
+    return render(request, 'plane-configuration.html', {'form': form, 'plane_id': plane_id})
+
+
+@login_required()
+def plane_planning(request, plane_id):
+    plane = get_object_or_404(Plane, pk=plane_id)
+    airline = request.user.airline.first()
+    airport = plane.hub.airport
+    initial = {'airline': airline, 'airport': airport}
+    if request.method == 'POST':
+        form = LineChoiceForm(request.POST, initial=initial)
+        if form.is_valid():
+            # Getting the new player line
+            line = form.cleaned_data['line']
+            if plane.airline == airline and line.airline == airline:
+                # Deleting existing flights for this plane
+                Flight.objects.filter(plane=plane).delete()
+
+                time = 0
+                day = 0
+                day_next = 0
+
+                flight_time = math.ceil(2 * line.line.length / plane.type.speed) * 30
+                while day < 7:
+                    time_next = (time + flight_time) % (24 * 30 * 2)
+                    day_next += ((time + flight_time)/(24 * 30 * 2))
+                    if day_next < 7:
+                        flight = Flight()
+                        flight.day = int(day)
+                        flight.start = datetime.time(hour=int(time/60), minute=int(time % 60))
+                        flight.plane = plane
+                        flight.line = line
+                        flight.save()
+                    time = time_next
+                    day = day_next
+                return redirect('planes')
+            else:
+                form.add_error('', _('You do not own this line'))
+
+    else:
+        form = LineChoiceForm(initial=initial)
+
+    return render(request, 'plane-planning.html', {'form': form, 'plane_id': plane_id})
+
+
+@login_required()
 def user_home(request):
     airline = request.user.airline.all().select_related('alliance').first()
     if not Hub.objects.filter(owner=airline).exists():
         return redirect('registration-hub')
-    return render(request, 'home.html', {'airline': airline})
+    flights = Flight.objects.filter(line__airline=airline).select_related('line__line', 'plane')[:10]
+    try:
+        news = News.objects.all().latest('date')
+    except News.DoesNotExist:
+        news = None
+    return render(request, 'home.html', {'airline': airline, 'flights': flights, 'news': news})
 
 
 @login_required()
 def buy_hub(request):
-    airports = Airport.objects.all()
+    airline = request.user.airline.first()
+    hubs = airline.hubs.all().values_list('airport_id', flat=True)
+    airports = Airport.objects.all().exclude(id__in=hubs)
     return render(request, 'buy-hub.html', {'airports': airports})
 
 
 @login_required()
 def buy_hub_save(request):
     if request.method == 'POST':
-        airportId = request.POST['airport']
+        airport_id = request.POST['airport']
         airline = request.user.airline.first()
-        if Airport.objects.filter(pk=airportId).exists():
-            if not (Hub.objects.filter(owner=airline, airport_id=airportId).exists()):
+        if Airport.objects.filter(pk=airport_id).exists():
+            if not (Hub.objects.filter(owner=airline, airport_id=airport_id).exists()):
                 hub = Hub()
                 hub.owner_id = airline.pk
-                hub.airport_id = airportId
+                hub.airport_id = airport_id
                 hub.save()
                 return redirect('home')
             else:
-                airports = Airport.objects.all()
+                hubs = airline.hubs.all().values_list('airport_id', flat=True)
+                airports = Airport.objects.all().exclude(id__in=hubs)
                 return render(request, 'buy-hub.html', {'airports': airports, 'error': "Own this hub"})
     else:
         return redirect('buy-hub')
@@ -125,19 +193,73 @@ def buy_hub_save(request):
 
 @login_required()
 def alliance_home(request):
-    alliance_id = request.user.airline.first().alliance_id
+    airline = request.user.airline.first()
+    alliance_id = airline.alliance_id
     if alliance_id is not None:
         return redirect('alliance', alliance_id=str(alliance_id))
     else:
         alliances = Alliance.objects.all().select_related('founder')
-        return render(request, 'alliances.html', {'alliances': alliances})
+        requests = AllianceRequest.objects.filter(airline=airline)
+        return render(request, 'alliances.html', {'alliances': alliances, 'requests': requests})
 
 
 @login_required()
-def alliance(request, alliance_id):
+def alliance_view(request, alliance_id):
     alliance = get_object_or_404(Alliance, pk=alliance_id)
     airline_list = alliance.members.all()
-    return render(request, 'alliance.html', {'airlines': airline_list, 'alliance': alliance})
+    airline = request.user.airline.first()
+    requests = None
+    is_founder = airline.is_founder
+    if is_founder:
+        requests = alliance.join_requests.all().select_related('airline')
+    return render(request, 'alliance.html',
+                  {'airlines': airline_list, 'alliance': alliance, 'is_founder': is_founder, 'requests': requests})
+
+
+@login_required()
+def alliance_join(request, alliance_id):
+    alli = get_object_or_404(Alliance, pk=alliance_id)
+    airline = request.user.airline.first()
+    if not AllianceRequest.objects.filter(alliance=alli, airline=airline).exists():
+        req = AllianceRequest(alliance=alli, airline=airline)
+        req.save()
+    return redirect('alliance-home')
+
+
+@login_required()
+def allow_into_alliance(request):
+    if request.method == 'POST':
+        airline = request.user.airline.select_related('alliance').first()
+        alliance = airline.alliance
+        if airline.is_founder:
+            req = get_object_or_404(AllianceRequest, pk=request.POST.get('req_id', None))
+            if req.alliance == alliance:
+                req.airline.alliance = alliance
+                req.airline.save()
+                req.delete()
+
+    return redirect('alliance-home')
+
+@login_required()
+def research_list(request):
+    airline = request.user.airline.select_related('alliance').first()
+    if request.method == 'POST':
+        research = Research.objects.get(pk=request.POST['research'])
+        if not airline.research.filter(pk=request.POST['research']).exists():
+            airline.research_queue = research
+            airline.research_end = datetime.datetime.now() + datetime.timedelta(hours=3)
+            airline.save()
+    research_done = airline.research.all()
+    research_list = Research.objects.all().exclude(id__in=research_done.values_list('id', flat=True))
+
+    return render(request, 'research.html', {'research_done': research_done, 'research_list': research_list,
+                                             'current_research': airline.research_queue, 'airline': airline})
+
+
+@login_required()
+def airline_leaderboard(request):
+    airlines = Airline.objects.all().exclude(rank=0).order_by('rank')[:10]
+    return render(request, 'ranking.html', {'airlines': airlines})
 
 
 @login_required()
@@ -161,6 +283,60 @@ def add_achievement(airline, achievement_id):
     achievement = Success.objects.get(pk=achievement_id)
     if not airline.success.filter(pk=achievement_id):
         airline.success.add(achievement)
+
+@login_required()
+def buy_plane(request):
+    hubs = Hub.objects.filter(owner=request.user.airline.first())
+    return render(request, 'buy-plane-hublist.html', {'hubs': hubs})
+
+@login_required()
+def buy_plane_after_hub(request):
+    if request.method == 'POST':
+        hub_id = request.POST['hub_id']
+        hub = Hub.objects.filter(pk=hub_id)
+        if hub.exists():
+            planetypes = PlaneType.objects.all()
+            return render(request, 'buy-plane-typelist.html', {'planetypes': planetypes, 'hub_id': hub_id})
+
+    return redirect('buy-plane')
+
+@login_required()
+def buy_plane_save(request):
+    error = None
+    airline = request.user.airline.first()
+    if request.method == 'POST':
+        hub_id = request.POST['hub_id']
+        type_id = request.POST['planetype_id']
+        quantity = int(request.POST['quantity'])
+        hub = Hub.objects.filter(pk=hub_id, owner=airline)
+        type = PlaneType.objects.filter(pk=type_id)
+        if hub.exists():
+            if type.exists():
+                type = type.first()
+                hub = hub.first()
+                if int(quantity * type.price) < airline.money:
+                    airline.credit(int(quantity * type.price))
+                    for i in range(0,quantity):
+                        plane = Plane()
+                        plane.name = str(i)
+                        plane.type = type
+                        plane.airline = airline
+                        plane.hub_id = int(hub_id)
+                        plane.first = 0
+                        plane.second = 0
+                        plane.third = type.max_seats
+                        plane.available_on = timezone.now()
+                        plane.save()
+                    return redirect('home')
+
+                else:
+                    error = "You don't have enough money "
+            else:
+                error = "Plane type doesn't exist,please choose another type"
+        else:
+            error = "Hub doesn't exist, please choose another hub"
+    return redirect('buy-plane')
+
 
 @login_required()
 def hub_list(request):

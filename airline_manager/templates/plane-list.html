@@ -4,9 +4,10 @@
 {% load static from staticfiles %}
 
 {% block content %}
+    <a class="paper-button paper-button-raised paper-button--colored"  href="{% url 'buy-plane' %}"><i class="material-icons">airplanemode_active</i> Buy plane</a>
     <div class="paper-card paper-shadow-2dp">
         <div class="paper-table-title">Planes</div>
-        <table class="paper-table">
+        <table class="paper-table paper-table--responsive">
             <thead>
             <tr>
                 <th>Name</th>
@@ -20,8 +21,11 @@
             <tr>
                 <td>{{ plane.name }} ({{ plane.type }})</td>
                 <td class="paper-table-numeric">{{ plane.first }}/{{ plane.second }}/{{ plane.third }}</td>
-                <td class="paper-table-numeric">2.44</td>
-                <td></td>
+                <td class="paper-table-numeric">{{ plane.type.consumption }}</td>
+                <td>
+                    <a href="{% url "plane-configuration" plane.id %}"><i class="material-icons">airline_seat_recline_normal</i></a>
+                    <a href="{% url "plane-planning" plane.id %}"><i class="material-icons">flight_takeoff</i></a>
+                </td>
             </tr>
             {% endfor %}
             </tbody>

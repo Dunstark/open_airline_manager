@@ -1,0 +1,74 @@
+{% extends "template.html" %}
+{% load i18n %}
+{% load gravatar %}
+{% load static from staticfiles %}
+
+{% block content %}
+    <div class="paper-card paper-shadow-2dp">
+        <div class="paper-table-title">{% trans "Research" %}</div>
+        <div class="subhead">Currently researching</div>
+        <ul>
+            <li><span class="paper-label">Attractiveness:</span>{{ airline.attractiveness }}</li>
+            <li><span class="paper-label">Security:</span>{{ airline.security }}</li>
+            <li><span class="paper-label">Effectiveness:</span>{{ airline.effectiveness }}</li>
+            <li><span class="paper-label">Inflight Bonuses:</span>{{ airline.gains }}</li>
+        </ul>
+        <div class="subhead">Currently researching</div>
+        <p>{{ current_research }}</p>
+        <div class="subhead">{% trans "Possible Research" %}</div>
+        <table class="paper-table paper-table--responsive">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Attractiveness</th>
+                <th>Security</th>
+                <th>Effectiveness</th>
+                <th>Inflight</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for research in research_list %}
+            <tr>
+                <td>{{ research }}</td>
+                <td class="paper-table-numeric">{{ research.attractiveness }}</td>
+                <td class="paper-table-numeric">{{ research.security }}</td>
+                <td class="paper-table-numeric">{{ research.effectiveness }}</td>
+                <td class="paper-table-numeric">{{ research.gains }}</td>
+                <td>
+                    <form method="post" action="{% url 'research' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="research" value="{{ research.pk }}">
+                        <input type="submit" value="Research" class="paper-button paper-button--colored">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="subhead">{% trans "Research Done" %}</div>
+        <table class="paper-table paper-table--responsive">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Attractiveness</th>
+                <th>Security</th>
+                <th>Effectiveness</th>
+                <th>Inflight</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for research in research_done %}
+            <tr>
+                <td>{{ research }}</td>
+                <td class="paper-table-numeric">{{ research.attractiveness }}</td>
+                <td class="paper-table-numeric">{{ research.security }}</td>
+                <td class="paper-table-numeric">{{ research.effectiveness }}</td>
+                <td class="paper-table-numeric">{{ research.gains }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+</div>
+
+{% endblock %}

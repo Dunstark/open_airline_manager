@@ -22,8 +22,9 @@
                 <td>{{ alliance.founder }}</td>
                 <td class="paper-table-numeric">{{ alliance.rank }}</td>
                 <td>
-                    <a href="#"><i class="material-icons">airline_seat_recline_normal</i></a>
-                    <a href="#"><i class="material-icons">flight_takeoff</i></a>
+                    <a href="{% url 'join-alliance' alliance.pk %}" class="paper-button paper-button--colored">
+                        Join
+                    </a>
                 </td>
             </tr>
             {% endfor %}
