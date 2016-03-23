@@ -2,34 +2,47 @@
 {% load i18n %}
 {% load gravatar %}
 {% load static from staticfiles %}
-
+{% load widget_tweaks %}
 {% block content %}
     <a class="paper-button paper-button-raised paper-button--colored"><i class="material-icons">airplanemode_active</i> Buy plane</a>
     <div class="paper-card paper-shadow-2dp">
-        <div class="paper-table-title">Planes</div>
-        <table class="paper-table paper-table--responsive">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>First/Second/Third</th>
-                <th>Consommation(L/100km/passenger)</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for plane in planes %}
-            <tr>
-                <td>{{ plane.name }} ({{ plane.type }})</td>
-                <td class="paper-table-numeric">{{ plane.first }}/{{ plane.second }}/{{ plane.third }}</td>
-                <td class="paper-table-numeric">2.44</td>
-                <td>
-                    <a href="#"><i class="material-icons">airline_seat_recline_normal</i></a>
-                    <a href="#"><i class="material-icons">flight_takeoff</i></a>
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div class="paper-card-title">
+        {% trans "Change configuration" %}
+    </div>
+
+    <div class="paper-card-content">
+
+    {% for error in form.non_field_errors %}
+        <div class="paper-input-error">{{ error }}</div>
+    {% endfor %}
+
+
+    <form method="post" action="{% url 'plane-configuration' plane_id %}">
+    {% csrf_token %}
+    {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
+
+    {% for field in form.visible_fields %}
+        <div class="paper-input-group {% if field.errors %}paper-input-group--error{% endif %}">
+            <label class="paper-label">{{field.label_tag}}</label>
+            {% render_field field class+="paper-input" %}
+        </div>
+        {% if field.errors %}
+            <div class="paper-input-error">
+                {% for error in field.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endfor %}
+    </div>
+    <div class="paper-card-actions">
+        <button type="submit" class="paper-button paper-button--colored">
+            {% trans "Modify" %}
+        </button>
+    </div>
+    </form>
 
 </div>
 

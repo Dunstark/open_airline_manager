@@ -1,12 +1,15 @@
+import math
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from airline_manager.forms import AirlineForm, ConfigurationForm
+from airline_manager.forms import AirlineForm, ConfigurationForm, LineChoiceForm
 from airline_manager.models import Airline, Airport, PlaneType, Plane, Alliance, Hub, Line, PlayerLine, Flight, \
-    DailyFlight, Success, AllianceRequest
+    DailyFlight, Success, AllianceRequest, Research, News
 from django.shortcuts import get_object_or_404
+import datetime
+from django.utils.translation import ugettext as _
 
 
 def index(request):
@@ -18,7 +21,7 @@ def index(request):
 
 def register(request):
     if request.user.is_authenticated():
-        if not (request.user.airline.exists()):
+        if not (request.user.airline.all().exists()):
             active = 2
             if request.method == 'POST':
                 form = AirlineForm(request.POST)
@@ -95,11 +98,9 @@ def plane_configuration(request, plane_id):
     plane = get_object_or_404(Plane, pk=plane_id)
     if request.method == 'POST':
         form = ConfigurationForm(request.POST, instance=plane)
-
         if form.is_valid():
             form.save()
             return redirect('planes')
-
     else:
         form = ConfigurationForm(instance=plane)
 
@@ -107,33 +108,80 @@ def plane_configuration(request, plane_id):
 
 
 @login_required()
+def plane_planning(request, plane_id):
+    plane = get_object_or_404(Plane, pk=plane_id)
+    airline = request.user.airline.first()
+    airport = plane.hub.airport
+    initial = {'airline': airline, 'airport': airport}
+    if request.method == 'POST':
+        form = LineChoiceForm(request.POST, initial=initial)
+        if form.is_valid():
+            # Getting the new player line
+            line = form.cleaned_data['line']
+            if plane.airline == airline and line.airline == airline:
+                # Deleting existing flights for this plane
+                Flight.objects.filter(plane=plane).delete()
+
+                time = 0
+                day = 0
+                day_next = 0
+
+                flight_time = math.ceil(2 * line.line.length / plane.type.speed) * 30
+                while day < 7:
+                    time_next = (time + flight_time) % (24 * 30 * 2)
+                    day_next += ((time + flight_time)/(24 * 30 * 2))
+                    if day_next < 7:
+                        flight = Flight()
+                        flight.day = int(day)
+                        flight.start = datetime.time(hour=int(time/60), minute=int(time % 60))
+                        flight.plane = plane
+                        flight.line = line
+                        flight.save()
+                    time = time_next
+                    day = day_next
+                return redirect('planes')
+            else:
+                form.add_error('', _('You do not own this line'))
+
+    else:
+        form = LineChoiceForm(initial=initial)
+
+    return render(request, 'plane-planning.html', {'form': form, 'plane_id': plane_id})
+
+
+@login_required()
 def user_home(request):
     airline = request.user.airline.all().select_related('alliance').first()
     if not Hub.objects.filter(owner=airline).exists():
         return redirect('registration-hub')
-    return render(request, 'home.html', {'airline': airline})
+    flights = Flight.objects.filter(line__airline=airline).select_related('line__line', 'plane')[:10]
+    news = News.objects.all().latest('date')
+    return render(request, 'home.html', {'airline': airline, 'flights': flights, 'news': news})
 
 
 @login_required()
 def buy_hub(request):
-    airports = Airport.objects.all()
+    airline = request.user.airline.first()
+    hubs = airline.hubs.all().values_list('airport_id', flat=True)
+    airports = Airport.objects.all().exclude(id__in=hubs)
     return render(request, 'buy-hub.html', {'airports': airports})
 
 
 @login_required()
 def buy_hub_save(request):
     if request.method == 'POST':
-        airportId = request.POST['airport']
+        airport_id = request.POST['airport']
         airline = request.user.airline.first()
-        if Airport.objects.filter(pk=airportId).exists():
-            if not (Hub.objects.filter(owner=airline, airport_id=airportId).exists()):
+        if Airport.objects.filter(pk=airport_id).exists():
+            if not (Hub.objects.filter(owner=airline, airport_id=airport_id).exists()):
                 hub = Hub()
                 hub.owner_id = airline.pk
-                hub.airport_id = airportId
+                hub.airport_id = airport_id
                 hub.save()
                 return redirect('home')
             else:
-                airports = Airport.objects.all()
+                hubs = airline.hubs.all().values_list('airport_id', flat=True)
+                airports = Airport.objects.all().exclude(id__in=hubs)
                 return render(request, 'buy-hub.html', {'airports': airports, 'error': "Own this hub"})
     else:
         return redirect('buy-hub')
@@ -187,6 +235,22 @@ def allow_into_alliance(request):
                 req.delete()
 
     return redirect('alliance-home')
+
+@login_required()
+def research_list(request):
+    airline = request.user.airline.select_related('alliance').first()
+    if request.method == 'POST':
+        research = Research.objects.get(pk=request.POST['research'])
+        if not airline.research.filter(pk=request.POST['research']).exists():
+            airline.research_queue = research
+            airline.research_end = datetime.datetime.now() + datetime.timedelta(hours=3)
+            airline.save()
+    research_done = airline.research.all()
+    research_list = Research.objects.all().exclude(id__in=research_done.values_list('id', flat=True))
+
+    return render(request, 'research.html', {'research_done': research_done, 'research_list': research_list,
+                                             'current_research': airline.research_queue, 'airline': airline})
+
 
 
 @login_required()

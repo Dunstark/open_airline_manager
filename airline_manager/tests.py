@@ -144,7 +144,7 @@ class PlaneListViewTestCase(TestCase):
     def test_page_loads(self):
         self.client.login(username="o1", password="testuser")
         response = self.client.get(reverse('planes'))
-        self.assertEquals(response.status_code,200)
+        self.assertEquals(response.status_code, 200)
 
     def test_page_redirects(self):
         self.client.login(username="o2", password="testuser")

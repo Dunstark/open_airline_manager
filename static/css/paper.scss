@@ -245,3 +245,30 @@
     }
   }
 }
+
+.selling-point {
+  max-height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 16px 0;
+  & .selling-point-content {
+    width: 50%;
+    box-sizing: border-box;
+    padding: 16px;
+    & .selling-point-title {
+      @extend h4;
+    }
+    & .selling-point-desc {
+      @extend .subhead;
+    }
+  }
+  & .selling-point-img {
+    max-height: 100vh;
+    width: 50%;
+  }
+  &:nth-of-type(2n) {
+    flex-direction: row-reverse;
+  }
+}
