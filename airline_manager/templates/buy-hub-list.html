@@ -1,0 +1,21 @@
+{% extends "template.html" %}
+{% load i18n %}
+{% load gravatar %}
+{% load static from staticfiles %}
+
+
+{% block content %}
+
+{% for airport in airports %}
+<div id="hub">
+    {{ airport }}
+    <form method="post" action="{% url 'buy-hub' %}">
+        {% csrf_token %}
+        <input type="hidden" name="airport_id" value="{{ airport.pk }}">
+        <input type="submit" value="buy">
+    </form>
+
+    </div>
+
+{% endfor %}
+{% endblock %}

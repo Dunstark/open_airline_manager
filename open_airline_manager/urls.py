@@ -27,9 +27,10 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^profile/$', views.profile, name='profile'),
     url(r'^planes/$', views.planes_list, name='planes'),
-    url(r'^hub/$',views.buy_hub,name='buy-hub'),
-	url(r'^hubs/buy/$',views.buy_hub_save,name='buy-hub-save'),
-    url(r'^alliance/(?P<alliance_id>[0-9]+)/$',views.alliance,name='airline_list'),
-    url(r'^testing/success$', views.test_success, name='test-success'),
+    url(r'^hubs/$', views.hubs_list, name='hubs'),
+    url(r'^hubs/list/$',views.hub,name='hub-list'),
+	url(r'^hubs/buy/$',views.buy_hub,name='buy-hub'),
+    url(r'^planes/buy/$',views.buy_plane,name='buy-plane'),
+    url(r'^planes/buy/type/$',views.buy_plane_after_hub,name='buy-plane-type'),
+    url(r'^planes/buy/type/save/$',views.buy_plane_save,name='buy-plane-save')
 ]
-

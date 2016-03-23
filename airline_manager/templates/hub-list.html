@@ -1,0 +1,30 @@
+{% extends "template.html" %}
+{% load i18n %}
+{% load gravatar %}
+{% load static from staticfiles %}
+
+{% block content %}
+    <div class="paper-card paper-shadow-2dp">
+        <div class="paper-table-title">Hubs</div>
+        <table class="paper-table">
+            <thead>
+            <tr>
+                <th>IATA</th>
+                <th>Name</th>
+                <th>City</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for hub in hubs %}
+            <tr>
+                <td>{{ hub.airport.iata }} </td>
+                <td>{{hub.airport.name}}</td>
+                <td>{{hub.airport.city}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+</div>
+
+{% endblock %}
