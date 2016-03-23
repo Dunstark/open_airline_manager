@@ -32,17 +32,14 @@ class Airline(models.Model):
     last_updated = models.DateTimeField(default=timezone.now)
     research = models.ManyToManyField("Research", blank=True, related_name="airlines")
     research_queue = models.ForeignKey("Research", null=True, blank=True, related_name="airlines_currently_researching")
-    research_end = models.DateTimeField(default=datetime.datetime.now, blank=True, null=True)
+    research_end = models.DateTimeField(default=timezone.now, blank=True, null=True)
     success = models.ManyToManyField(Success, blank=True)
     rank_history = ArrayField(models.BigIntegerField(), size=7, default=empty_history)
+    rank = models.IntegerField(default=0)
     income_history = ArrayField(models.BigIntegerField(), size=7, default=empty_history)
 
     def __str__(self):
         return self.name
-
-    @property
-    def rank(self):
-        return self.rank_history[0]
 
     @property
     def is_founder(self):

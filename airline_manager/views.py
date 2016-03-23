@@ -255,6 +255,11 @@ def research_list(request):
                                              'current_research': airline.research_queue, 'airline': airline})
 
 
+@login_required()
+def airline_leaderboard(request):
+    airlines = Airline.objects.all().exclude(rank=0).order_by('rank')[:10]
+    return render(request, 'ranking.html', {'airlines': airlines})
+
 
 @login_required()
 def test_success(request):

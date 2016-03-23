@@ -37,5 +37,6 @@ urlpatterns = [
     url(r'^alliance/allow/$', views.allow_into_alliance, name='allow-into-alliance'),
     url(r'^alliance/(?P<alliance_id>[0-9]+)/join/$', views.alliance_join, name='join-alliance'),
     url(r'^research/$', views.research_list, name='research'),
+    url(r'^leaderboard/$', views.airline_leaderboard, name='leaderboard'),
     url(r'^testing/success$', views.test_success, name='test-success'),
 ]
