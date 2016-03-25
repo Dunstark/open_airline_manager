@@ -47,5 +47,6 @@ urlpatterns = [
     url(r'^lines/buy/(?P<hub_id>[0-9]+)/$',views.buy_line, name='buy-line'),
     url(r'^planes/buy/$',views.buy_plane,name='buy-plane'),
     url(r'^planes/buy/type/$',views.buy_plane_after_hub,name='buy-plane-type'),
-    url(r'^planes/buy/type/save/$',views.buy_plane_save,name='buy-plane-save')
+    url(r'^planes/buy/type/save/$',views.buy_plane_save,name='buy-plane-save'),
+    url(r'^alliance/creation/$',views.create_alliance,name='create-alliance')
 ]

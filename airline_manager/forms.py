@@ -1,6 +1,6 @@
 from django.forms import ModelForm, Form, ModelChoiceField
 from django.core.exceptions import NON_FIELD_ERRORS
-from airline_manager.models import Airline, PlaneType, Plane, Hub, Airport, Line, PlayerLine
+from airline_manager.models import Airline, Alliance,PlaneType, Plane, Hub, Airport, Line, PlayerLine
 from django.utils.translation import ugettext as _
 import sys
 
@@ -39,3 +39,8 @@ class LineChoiceForm(Form):
         super(LineChoiceForm, self).__init__(*args, **kwargs)
         possible_lines = self.initial['airline'].lines.filter(line__start_point_id=self.initial['airport'])
         self.fields['line'] = ModelChoiceField(queryset=possible_lines)
+
+class AllianceForm(ModelForm):
+    class Meta:
+        model = Alliance
+        fields = ['name']

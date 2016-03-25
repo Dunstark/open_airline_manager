@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from airline_manager.forms import AirlineForm, ConfigurationForm, LineChoiceForm
+from airline_manager.forms import AirlineForm, ConfigurationForm, LineChoiceForm, AllianceForm
 from airline_manager.models import Airline, Airport, PlaneType, Plane, Alliance, Hub, Line, PlayerLine, Flight, \
     DailyFlight, Success, AllianceRequest, Research, News
 from django.shortcuts import get_object_or_404
@@ -368,3 +368,25 @@ def buy_line(request, hub_id):
     playerlines=PlayerLine.objects.filter(airline=airline,line__start_point=airport)#lines which client already buy
     lines=Line.objects.filter(start_point=airport).exclude(id__in=playerlines.values_list('line_id')) #lines belong to this airport
     return render(request,'buy-line.html', {'hub_id':hub_id,'error':error,'lines':lines})
+
+@login_required()
+def create_alliance(request):
+    error = None
+    airline =request.user.airline.first()
+    if airline.alliance is None:
+        if request.method == 'POST':
+            form = AllianceForm(request.POST)
+
+            if form.is_valid():
+                alliance=form.save(commit=False)
+                alliance.founder_id=airline.pk
+                alliance.save()
+                airline.alliance = alliance
+                airline.save()
+                return redirect('home')
+        else:
+            form=AllianceForm()
+
+        return render(request,'alliance-creation.html',{'form':form})
+
+    return redirect('home')
