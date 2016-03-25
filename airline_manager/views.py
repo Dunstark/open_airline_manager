@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from airline_manager.forms import AirlineForm, ConfigurationForm, LineChoiceForm, AllianceForm
+from airline_manager.forms import AirlineForm, ConfigurationForm, LineChoiceForm
 from airline_manager.models import Airline, Airport, PlaneType, Plane, Alliance, Hub, Line, PlayerLine, Flight, \
     DailyFlight, Success, AllianceRequest, Research, News
 from django.shortcuts import get_object_or_404
@@ -389,4 +389,24 @@ def create_alliance(request):
 
         return render(request,'alliance-creation.html',{'form':form})
 
+    return redirect('home')
+
+
+@login_required()
+def marketing(request):
+    airline = request.user.airline.first()
+    now = timezone.now()
+    if (now - airline.last_marketing).days < 7:
+        return render(request, 'marketing-no.html')
+    else:
+        return render(request, 'marketing.html')
+
+@login_required()
+def launch_marketing(request):
+    if request.method == "POST":
+        airline = request.user.airline.first()
+        if airline.money > 500000:
+            airline.credit(500000)
+            airline.last_marketing = timezone.now()
+            airline.save()
     return redirect('home')
