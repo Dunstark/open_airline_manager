@@ -502,8 +502,8 @@ def buy_plane_save(request):
 
 @login_required()
 def hub_list(request):
-    airlineID = request.user.airline.first().owner_id
-    hubs = Hub.objects.filter(owner_id=airlineID)
+    airline = request.user.airline.first()
+    hubs = Hub.objects.filter(owner=airline)
     return render(request, 'hub-list.html',{'hubs': hubs})
 
 @login_required()

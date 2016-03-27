@@ -3,15 +3,27 @@
 
 
 {% block content %}
-    {% blocktrans %}
-    <p>your airports</p>
-    {% endblocktrans %}
-    {% for hub in hubs %}
-        <div>
-        {{ hub }}
-        <a href="{% url 'hub-view' hub.pk %}">{% trans 'View' %}</a>
-        <a href="{% url 'buy-line' hub.pk %}">{% trans 'Buy a line' %}</a>
-        </div>
-    {% endfor %}
+    <div class="paper-card paper-shadow-2dp">
+        <div class="paper-table-title">Hubs</div>
+        <table class="paper-table paper-table--responsive">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for hub in hubs %}
+            <tr>
+                <td>{{ hub }}</td>
+                <td>
+                    <a href="{% url 'hub-view' hub.pk %}" class="paper-button paper-button--colored">{% trans 'View all lines' %}</a>
+                    <a href="{% url 'buy-line' hub.pk %}" class="paper-button paper-button--colored">{% trans 'Buy a line' %}</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 {% endblock %}
