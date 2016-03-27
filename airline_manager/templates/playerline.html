@@ -2,9 +2,27 @@
 
 {% block content %}
 
-{% for playerline in playerlines %}
-    {{ playerline }}
 
-{% endfor %}
+    <div class="paper-card paper-shadow-2dp">
+        <div class="paper-table-title">Lines</div>
+        <table class="paper-table paper-table--responsive">
+            <thead>
+            <tr>
+                <th>Line</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for playerline in playerlines %}
+            <tr>
+                <td>{{ playerline }} </td>
+                <td>
+
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 {% endblock %}

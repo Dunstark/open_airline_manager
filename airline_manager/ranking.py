@@ -27,9 +27,9 @@ for airline in airlines:
         line = flight.line
         length = line.line.length
         # We compute occupation of the plane
-        pass_first = plane.first * min(max(1.+float(right_first*length-line.price_first)/(right_first*length), 0.),1)
-        pass_second = plane.second * min(max(1.+float(right_second*length-line.price_second)/(right_second*length), 0.),1)
-        pass_third = plane.third * min(max(1.+float(right_third*length-line.price_third)/(right_third*length), 0.),1)
+        pass_first = plane.first * min(max(1.+float(right_first*length-line.price_first)/(right_first*length), 0.), 1)
+        pass_second = plane.second * min(max(1.+float(right_second*length-line.price_second)/(right_second*length), 0.), 1)
+        pass_third = plane.third * min(max(1.+float(right_third*length-line.price_third)/(right_third*length), 0.), 1)
         # We calculate the profits from this line
         total_passenger = pass_third + pass_second + pass_first
         profit = pass_first * line.price_first + pass_second * line.price_second + pass_third * line.price_third
@@ -62,8 +62,6 @@ for airline in airlines:
     airline.rank_history.append(rank)
     airline.save()
     rank += 1
-
-
 
 
 

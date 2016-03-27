@@ -14,6 +14,7 @@
     </div>
     <div class="paper-card-content profile-card-content">
         <div class="title">{% trans "Achievements" %}({% with airline.number_of_success as n %}{{ n.0 }}/{{ n.1 }}{% endwith %})</div>
+        <div><span class="subhead">{{ airline.score }}</span><i class="material-icons">gamepad</i></div>
         {% for achievement in airline.success.all %}
             <div class="paper-media">
                 <div class="paper-media-icon">

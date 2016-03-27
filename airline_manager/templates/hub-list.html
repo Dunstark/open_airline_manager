@@ -8,14 +8,18 @@
         <table class="paper-table paper-table--responsive">
             <thead>
             <tr>
+                <th>IATA</th>
                 <th>Name</th>
+                <th>City</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
             {% for hub in hubs %}
             <tr>
-                <td>{{ hub }}</td>
+                <td>{{hub.airport.iata}} </td>
+                <td>{{hub.airport.name}}</td>
+                <td>{{hub.airport.city}}</td>
                 <td>
                     <a href="{% url 'hub-view' hub.pk %}" class="paper-button paper-button--colored">{% trans 'View all lines' %}</a>
                     <a href="{% url 'buy-line' hub.pk %}" class="paper-button paper-button--colored">{% trans 'Buy a line' %}</a>
