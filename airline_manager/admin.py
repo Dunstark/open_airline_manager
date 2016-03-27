@@ -1,16 +1,17 @@
 from django.contrib import admin
 
-from .models import Airline, PlaneType, Plane, Airport, Alliance, Line, PlayerLine, Success, Research, Hub, Flight, News
+from . import models
 
-admin.site.register(Airline)
-admin.site.register(PlaneType)
-admin.site.register(Plane)
-admin.site.register(Airport)
-admin.site.register(Alliance)
-admin.site.register(Line)
-admin.site.register(PlayerLine)
-admin.site.register(Success)
-admin.site.register(Research)
-admin.site.register(Hub)
-admin.site.register(Flight)
-admin.site.register(News)
+admin.site.register(models.Airline)
+admin.site.register(models.PlaneType)
+admin.site.register(models.Plane)
+admin.site.register(models.Airport)
+admin.site.register(models.Alliance)
+admin.site.register(models.Line)
+admin.site.register(models.PlayerLine)
+admin.site.register(models.Success)
+admin.site.register(models.Research)
+admin.site.register(models.Hub)
+admin.site.register(models.Flight)
+admin.site.register(models.DailyFlight)
+admin.site.register(models.News)

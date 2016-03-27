@@ -17,7 +17,6 @@ class ConfigurationForm(ModelForm):
         fields = ['first', 'second', 'third']
 
     def is_valid(self):
-
         # Running the ModelForm default validation
         valid = super(ModelForm, self).is_valid()
 
