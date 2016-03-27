@@ -530,3 +530,45 @@ def buy_line(request, hub_id):
     playerlines=PlayerLine.objects.filter(airline=airline,line__start_point=airport)#lines which client already buy
     lines=Line.objects.filter(start_point=airport).exclude(id__in=playerlines.values_list('line_id')) #lines belong to this airport
     return render(request,'buy-line.html', {'hub_id':hub_id,'error':error,'lines':lines})
+
+@login_required()
+def create_alliance(request):
+    error = None
+    airline =request.user.airline.first()
+    if airline.alliance is None:
+        if request.method == 'POST':
+            form = AllianceForm(request.POST)
+
+            if form.is_valid():
+                alliance=form.save(commit=False)
+                alliance.founder_id=airline.pk
+                alliance.save()
+                airline.alliance = alliance
+                airline.save()
+                return redirect('home')
+        else:
+            form=AllianceForm()
+
+        return render(request,'alliance-creation.html',{'form':form})
+
+    return redirect('home')
+
+
+@login_required()
+def marketing(request):
+    airline = request.user.airline.first()
+    now = timezone.now()
+    if (now - airline.last_marketing).days < 7:
+        return render(request, 'marketing-no.html')
+    else:
+        return render(request, 'marketing.html')
+
+@login_required()
+def launch_marketing(request):
+    if request.method == "POST":
+        airline = request.user.airline.first()
+        if airline.money > 500000:
+            airline.credit(500000)
+            airline.last_marketing = timezone.now()
+            airline.save()
+    return redirect('home')
