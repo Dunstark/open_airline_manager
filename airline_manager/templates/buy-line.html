@@ -2,21 +2,33 @@
 {% load i18n %}
 
 {% block content %}
-    <div>
-    {% if error %}
-        {{ error }}
-    {% endif %}
-    </div>
-    <div>
-    {% for line in lines %}
-        {{ line }}
-        <form method="post" action="{% url 'buy-line' hub_id %}">
-            <input type="hidden" name="line" value="{{ line.pk }}">
-            <input type="submit" value="buy">
-            {% csrf_token %}
-        </form>
-
-    {% endfor %}
+    <div class="paper-card paper-shadow-2dp">
+        <div class="paper-table-title">Buy a line</div>
+        {% if error %}
+            {{ error }}
+        {% endif %}
+        <table class="paper-table paper-table--responsive">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for line in lines %}
+            <tr>
+                <td>{{ line }}</td>
+                <td>
+                    <form method="post" action="{% url 'buy-line' hub_id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="line" value="{{ line.pk }}">
+                        <input type="submit" value="Buy" class="paper-button paper-button--colored">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 
 {% endblock %}

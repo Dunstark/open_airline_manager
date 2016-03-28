@@ -37,12 +37,14 @@ class Airline(models.Model):
     rank_history = ArrayField(models.BigIntegerField(), size=7, default=empty_history)
     rank = models.IntegerField(default=0)
     income_history = ArrayField(models.BigIntegerField(), size=7, default=empty_history)
+    income = models.BigIntegerField(default=0)
 
     def __str__(self):
         return self.name
 
     @property
     def is_founder(self):
+        # We need to be sure of the integrity of this function, hence why we do not use a cached_property
         if self.alliance:
             return self.alliance.founder == self
         else:
@@ -117,6 +119,7 @@ class Airport(models.Model):
     iata = models.CharField(max_length=3, unique=True)
     type = models.IntegerField(default=9)
     tax = models.IntegerField(default=10)
+    price = models.BigIntegerField(default=1000000)
 
     def __str__(self):
         return self.iata + " " + self.city + " - " + self.name
@@ -235,11 +238,13 @@ class Flight(models.Model):
 
 
 class DailyFlight(models.Model):
-    flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name="daily_versions")
+    plane = models.ForeignKey(Plane, on_delete=models.CASCADE, related_name="today_flights")
+    line = models.ForeignKey(PlayerLine, on_delete=models.CASCADE)
+    start = models.TimeField(default=datetime.datetime.now)
     accounted_for = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.flight)
+        return str(self.line) + " " + str(self.start)
 
 
 class News(models.Model):
