@@ -1,14 +1,16 @@
 {% extends "template.html" %}
 {% load i18n %}
 {% load gravatar %}
+{% load humanize %}
 {% load static from staticfiles %}
 
 {% block content %}
     <div class="paper-card paper-shadow-2dp">
-         You should afford the fees of the company :$ 500000
+        <div class="paper-card-title">Marketing</div>
+         <p>Launch a new marketing campaign (Price: {{ 500000|intcomma }}€)</p>
         <form method ="post" action="{%url 'marketing-save'%}">
             {% csrf_token %}
-            <input type="submit" value="Launch a campaign">
+            <input type="submit" value="Launch a campaign" class="paper-button paper-button--colored">
         </form>
 </div>
 

@@ -40,9 +40,10 @@ for airline in airlines:
         income += profit - losses
     # Deleting extra flights
     flights.delete()
-    if airline.research_end < timezone.now():
-        airline.research.add(airline.research_queue)
-        airline.research_queue = None
+    if airline.research_queue is not None:
+        if airline.research_end < timezone.now():
+            airline.research.add(airline.research_queue)
+            airline.research_queue = None
     # Adding the income and saving all progress
     airline.income_history.pop(0)
     airline.income_history.append(income)

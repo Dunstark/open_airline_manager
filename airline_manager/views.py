@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from airline_manager.forms import AirlineForm, ConfigurationForm, LineChoiceForm
+from airline_manager.forms import AirlineForm, ConfigurationForm, LineChoiceForm, AllianceForm
 from airline_manager.models import Airline, Airport, PlaneType, Plane, Alliance, Hub, Line, PlayerLine, Flight, \
     DailyFlight, Success, AllianceRequest, Research, News
 from django.shortcuts import get_object_or_404

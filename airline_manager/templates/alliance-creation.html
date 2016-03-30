@@ -6,7 +6,7 @@
 {% block content %}
     <div class="paper-card paper-shadow-2dp">
         <div class="paper-card-title">
-        {% trans "Assign to a line" %}
+        {% trans "Create an alliance" %}
     </div>
 
     <div class="paper-card-content">
@@ -16,7 +16,7 @@
     {% endfor %}
 
 
-    <form method="post" action="{% url 'plane-planning' plane_id %}">
+    <form method="post" action="{% url 'create-alliance' %}">
     {% csrf_token %}
     {% for hidden in form.hidden_fields %}
         {{ hidden }}
@@ -38,7 +38,7 @@
     </div>
     <div class="paper-card-actions">
         <button type="submit" class="paper-button paper-button--colored">
-            {% trans "Assign" %}
+            {% trans "Modify" %}
         </button>
     </div>
     </form>
