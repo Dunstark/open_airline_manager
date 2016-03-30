@@ -12,7 +12,7 @@
     <form method="post" action="{% url 'buy-hub' %}">
         {% csrf_token %}
         <input type="hidden" name="airport_id" value="{{ airport.pk }}">
-        <input type="submit" value="buy">
+        <input type="submit" value="Buy">
     </form>
 
     </div>

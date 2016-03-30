@@ -448,12 +448,31 @@ def add_achievement(airline, achievement_id):
 
 @login_required()
 def buy_plane(request):
+    """Plane Buying Process
+
+    Offers a choice of hub to store the plane in
+
+    Args:
+        request: the HTTP request
+
+    Returns:
+
+    """
     hubs = Hub.objects.filter(owner=request.user.airline.first())
     return render(request, 'buy-plane-hublist.html', {'hubs': hubs})
 
 @login_required()
 def buy_plane_after_hub(request):
+    """Choice of a plane type
+
+    Args:
+        request: the HTTP request
+
+    Returns:
+
+    """
     if request.method == 'POST':
+        # We check the request is legit
         hub_id = request.POST['hub_id']
         hub = Hub.objects.filter(pk=hub_id)
         if hub.exists():
@@ -464,6 +483,14 @@ def buy_plane_after_hub(request):
 
 @login_required()
 def buy_plane_save(request):
+    """Creation of the planes
+
+    Args:
+        request: the HTTP request
+
+    Returns:
+
+    """
     error = None
     airline = request.user.airline.first()
     if request.method == 'POST':
@@ -472,12 +499,15 @@ def buy_plane_save(request):
         quantity = int(request.POST['quantity'])
         hub = Hub.objects.filter(pk=hub_id, owner=airline)
         type = PlaneType.objects.filter(pk=type_id)
+        # We check everything is fine with the request
         if hub.exists():
             if type.exists():
                 type = type.first()
                 hub = hub.first()
+                # We check the user has the funds
                 if int(quantity * type.price) < airline.money:
                     airline.credit(int(quantity * type.price))
+                    # We create the planes
                     for i in range(0,quantity):
                         plane = Plane()
                         plane.name = str(i)
@@ -502,12 +532,29 @@ def buy_plane_save(request):
 
 @login_required()
 def hub_list(request):
+    """Display a list of hubs the user owns
+
+    Args:
+        request: the HTTP request
+
+    Returns:
+
+    """
     airline = request.user.airline.first()
     hubs = Hub.objects.filter(owner=airline)
     return render(request, 'hub-list.html',{'hubs': hubs})
 
 @login_required()
 def playerline(request, hub_id):
+    """Player Lines in a given hub
+
+    Args:
+        request: the HTTP request
+        hub_id: The hub the user wants to know more about
+
+    Returns:
+
+    """
     airport=Hub.objects.get(pk=hub_id).airport #hubs belong to this user
     airline=request.user.airline.first()
     playerlines=PlayerLine.objects.filter(airline=airline,line__start_point=airport)
@@ -515,10 +562,20 @@ def playerline(request, hub_id):
 
 @login_required()
 def buy_line(request, hub_id):
+    """Buy a new line
+
+    Args:
+        request: the HTTP request
+        hub_id: The hub where the user wants the plane to take off.
+
+    Returns:
+
+    """
     error = None
     airline=request.user.airline.first()
     if request.method == 'POST':
         line_id=request.POST['line']
+        # Verifying the line doesn't exist.
         if not(PlayerLine.objects.filter(airline=airline, line_id=line_id).exists()):
             playerline=PlayerLine(airline_id=airline.pk, line_id=line_id, price_first=0, price_second=0,price_third=0)
             playerline.save()
@@ -533,6 +590,14 @@ def buy_line(request, hub_id):
 
 @login_required()
 def create_alliance(request):
+    """Alliance creation process
+
+    Args:
+        request: the HTTP request
+
+    Returns:
+
+    """
     error = None
     airline =request.user.airline.first()
     if airline.alliance is None:

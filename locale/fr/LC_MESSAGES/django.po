@@ -1,0 +1,162 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-03-16 15:10+0000\n"
+"PO-Revision-Date: 2016-03-16 16:25+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+
+#: airline_manager/templates/404.html:8
+msgid "Page not found"
+msgstr "Page introuvable"
+
+#: airline_manager/templates/404.html:11
+msgid "We can't seem to find the page you're looking for."
+msgstr "Nous n'avons pas pu trouver la page demandée."
+
+#: airline_manager/templates/alliance.html:12
+msgid "Members"
+msgstr "Membres"
+
+#: airline_manager/templates/alliance.html:30
+msgid "Requests"
+msgstr "Requête"
+
+#: airline_manager/templates/buy-hub.html:5
+msgid ""
+"\n"
+"            You already own this hub, please choose another one.\n"
+"        "
+msgstr ""
+"\n"
+"\tVous possédez déjà ce hub, veuillez en choisir un autre"
+
+#: airline_manager/templates/index.html:41
+msgid "Join Now!"
+msgstr "Inscrivez vous!"
+
+#: airline_manager/templates/index.html:42
+#: airline_manager/templates/registration/login.html:46
+msgid "Login"
+msgstr "Connexion"
+
+#: airline_manager/templates/index.html:53
+#: airline_manager/templates/index.html:81
+msgid "Compete with other players"
+msgstr "Soyez en concurrence avec les autres joueurs"
+
+#: airline_manager/templates/index.html:56
+#: airline_manager/templates/index.html:84
+msgid ""
+"Play with thousands of players from all over the world. Become the largest "
+"company\n"
+"                            and dominate the market. Form alliances with "
+"other players to achieve your goals!\n"
+"                        "
+msgstr ""
+"Jouez avec des milliers d'autres joueurs du monde entier. Devenez la pus "
+"grande compagnie\n"
+"\tet dominez le marché. Formez des alliances avec d'autres joueurs pour "
+"réaliser vos objectifs"
+
+#: airline_manager/templates/index.html:67
+msgid "Improve your company"
+msgstr "Améliorez votre compagnie"
+
+#: airline_manager/templates/index.html:70
+msgid ""
+"Use research to improve the quality of your flights or to become more "
+"efficient.\n"
+"                            Invest in marketing campaigns to improve your "
+"brand recognition.\n"
+"                        "
+msgstr ""
+"Faites des recherches pour améliorer la qualité de vos vols ou pour "
+"devenir plus efficaces \n"
+"\tInvestissez dans des campagnes marketings pour améliorer votre image de "
+"marque"
+
+#: airline_manager/templates/mini-footer.html:6
+msgid "Open Airline Manager"
+msgstr "Open Airline Manager"
+
+#: airline_manager/templates/mini-footer.html:6
+msgid "Open Airline Manager is available under an MIT license on"
+msgstr "Open Airline Manager est disponible sous une licence MIT sur"
+
+#: airline_manager/templates/plane-configuration.html:10
+msgid "Change configuration"
+msgstr "Changer la configuration"
+
+#: airline_manager/templates/plane-configuration.html:40
+#: airline_manager/templates/registration/registration.html:66
+msgid "Register"
+msgstr "S'enregistrer"
+
+#: airline_manager/templates/profile.html:16
+msgid "Achievements"
+msgstr "Succès"
+
+#: airline_manager/templates/registration/registration-hub.html:12
+#: airline_manager/templates/registration/registration.html:12
+msgid "Registration"
+msgstr "Enregistrement"
+
+#: airline_manager/templates/registration/registration-hub.html:20
+#: airline_manager/templates/registration/registration.html:20
+msgid "Create an airline"
+msgstr "Créer une compagnie"
+
+#: airline_manager/templates/registration/registration-hub.html:29
+#: airline_manager/templates/registration/registration.html:29
+msgid "Buy a hub"
+msgstr "Acheter un hub"
+
+#: airline_manager/templates/registration/registration-hub.html:41
+msgid ""
+"\n"
+"            <p>You already own this hub, please choose another one.</p>\n"
+"        "
+msgstr ""
+"\n"
+"\t<p>Vous possédez déjà ce hub, veuillez en choisir un autre</p>"
+
+#: airline_manager/templates/registration/registration-hub.html:66
+msgid "Buy"
+msgstr "Acheter"
+
+#: airline_manager/templates/template.html:56
+msgid "Home"
+msgstr "Accueil"
+
+#: airline_manager/templates/template.html:57
+msgid "Planes"
+msgstr "Avions"
+
+#: airline_manager/templates/template.html:58
+msgid "Network"
+msgstr "Réseau"
+
+#: airline_manager/templates/template.html:59
+msgid "Research"
+msgstr "Recherche"
+
+#: airline_manager/templates/template.html:60
+msgid "Marketing"
+msgstr "Marketing"
+
+#: airline_manager/templates/template.html:61
+msgid "Alliance"
+msgstr "Alliance"
