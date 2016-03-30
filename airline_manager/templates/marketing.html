@@ -1,0 +1,15 @@
+{% extends "template.html" %}
+{% load i18n %}
+{% load gravatar %}
+{% load static from staticfiles %}
+
+{% block content %}
+    <div class="paper-card paper-shadow-2dp">
+         You should afford the fees of the company :$ 500000
+        <form method ="post" action="{%url 'marketing-save'%}">
+            {% csrf_token %}
+            <input type="submit" value="Launch a campaign">
+        </form>
+</div>
+
+{% endblock %}
