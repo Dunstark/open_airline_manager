@@ -61,6 +61,7 @@ rank = 1
 for airline in airlines:
     airline.rank_history.pop(0)
     airline.rank_history.append(rank)
+    airline.rank = rank
     airline.save()
     rank += 1
 

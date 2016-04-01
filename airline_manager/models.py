@@ -56,23 +56,38 @@ class Airline(models.Model):
 
     @cached_property
     def attractiveness(self):
-        return self.research.aggregate(total=Sum('attractiveness'))['total']
+        aggr = self.research.aggregate(total=Sum('attractiveness'))['total']
+        if aggr is None:
+            aggr = 0
+        return aggr
 
     @cached_property
     def effectiveness(self):
-        return self.research.aggregate(total=Sum('effectiveness'))['total']
+        aggr = self.research.aggregate(total=Sum('effectiveness'))['total']
+        if aggr is None:
+            aggr = 0
+        return aggr
 
     @cached_property
     def security(self):
-        return self.research.aggregate(total=Sum('security'))['total']
+        aggr = self.research.aggregate(total=Sum('security'))['total']
+        if aggr is None:
+            aggr = 0
+        return aggr
 
     @cached_property
     def gains(self):
-        return self.research.aggregate(total=Sum('gains'))['total']
+        aggr = self.research.aggregate(total=Sum('gains'))['total']
+        if aggr is None:
+            aggr = 0
+        return aggr
 
     @cached_property
     def score(self):
-        return self.success.aggregate(total=Sum('points'))['total']
+        aggr = self.success.aggregate(total=Sum('points'))['total']
+        if aggr is None:
+            aggr = 0
+        return aggr
 
     @cached_property
     def number_of_success(self):

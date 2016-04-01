@@ -278,10 +278,17 @@ def buy_hub_save(request):
         if airport.exists():
             airport = airport.first()
             if not (Hub.objects.filter(owner=airline, airport_id=airport_id).exists()):
-                if airline.money < airport.price:
+                if not airline.hubs.exists():
                     hub = Hub()
                     hub.owner_id = airline.pk
                     hub.airport_id = airport_id
+                    hub.save()
+                    return redirect('home')
+                elif airline.money > airport.price:
+                    hub = Hub()
+                    hub.owner_id = airline.pk
+                    hub.airport_id = airport_id
+                    airline.credit(airport.price)
                     hub.save()
                     return redirect('home')
                 else:
@@ -420,7 +427,7 @@ def airline_leaderboard(request):
     Returns:
 
     """
-    airlines = Airline.objects.all().exclude(rank=0).order_by('rank')[:10]
+    airlines = Airline.objects.all().exclude(rank=0).order_by('rank')[:49]
     return render(request, 'ranking.html', {'airlines': airlines})
 
 
